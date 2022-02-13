@@ -1,0 +1,8 @@
+.popup__container {
+  border: 2 px solid red;
+  border-radius: 10px;
+  background-color: #fff;
+  height: 330px; /* сделать min??? */
+  width: 430px;
+  position: relative;
+}
