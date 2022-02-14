@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,14 +13,15 @@
      </header>
      <main class="content">
       <section class="profile">
-        <div class="profile__photo-wrapper">
-          <img class="profile__photo" alt="Фото профиля" src="./images/profile_image.jpg">
-        </div>
-        <div class="profile__info">
-          <h1 class="profile__name">Жак-Ив Кусто</h1>
-           <!-- может быть сделать модик для баттона -->
-          <p class="profile__profession">Исследователь океана</p>
-          <button class="profile__button-edit"></button>
+        <div class="profile__wrapper">
+          <div class="profile__photo-wrapper">
+            <img class="profile__photo" alt="Фото профиля" src="./images/profile_image.jpg">
+          </div>
+          <div class="profile__info">
+            <h1 class="profile__name">Жак-Ив Кусто</h1>
+            <button class="profile__button-edit"></button>
+            <p class="profile__profession">Исследователь океана</p>
+          </div>
         </div>
         <button class="profile__button-add"></button>
       </section>
@@ -87,19 +88,17 @@
        <p class="footer__copyright">&copy;2022 Mesto Russia</p>
      </footer>
 
-     <section class="popup"> <!-- Может быть разместить попап в секции с фото?
-    Позиционируйте попап фиксированно по центру экрана и задайте попапу полупрозрачный чёрный фон.
-    -->
+     <section class="popup">
       <div class="popup__container">
         <button class="popup__button-close"></button>
         <div class="popup__content">
           <h2 class="popup__title">Редактировать профиль</h2>
           <form class="popup__form">
-            <input type="text" class="popup__form-name" value="Жак-Ив Кусто" required>
-            <input type="text" class="popup__form-profession" value="Исследователь океана" required>
-            <input type="submit" value="Сохранить">
+            <input type="text" class="popup__form-name" required placeholder="Имя">
+            <input type="text" class="popup__form-profession" required placeholder="Профессия">
+            <input type="submit" class="popup__button-save" value="Сохранить">
           </form>
-          <button class="popup__button-save">Сохранить</button>
+          <!--<button class="popup__button-save">Сохранить</button>-->
         </div>
       </div>
     </section>

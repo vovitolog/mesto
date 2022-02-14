@@ -8,6 +8,8 @@
   width: 24px;
   height: 24px;
   cursor: pointer;
+  margin-left: 18px;
+  align-self: center;
 }
 
 .profile__button-edit:hover{
