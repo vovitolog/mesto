@@ -3,8 +3,8 @@
   height: 120px;
 }
 
-@media screen and (max-width: 680px) {
+@media screen and (max-width: 700px) {
   .profile__photo-wrapper {
-    margin-bottom: 22px;
+    margin-bottom: 26px;
   }
 }
