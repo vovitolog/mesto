@@ -1,8 +1,34 @@
+const initialCards = [
+  {
+    name: 'Архыз',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
+  },
+  {
+    name: 'Челябинская область',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
+  },
+  {
+    name: 'Иваново',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
+  },
+  {
+    name: 'Камчатка',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
+  },
+  {
+    name: 'Холмогорский район',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
+  },
+  {
+    name: 'Байкал',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
+  }
+];
+
 const popupCardAdd = document.querySelector('.popup_card-add'); // попап добавления карточки
 const popupCardAddCloseButtonElement = popupCardAdd.querySelector('.popup__button-close');
 const popupCardAddOpenButtonElement = document.querySelector('.profile__button-add');
 const popupCardAddSaveButtonElement = popupCardAdd.querySelector('.popup__button-save');
-
 
 const popupSection = document.querySelector('.popup');
 const popupCloseButtonElement = popupSection.querySelector('.popup__button-close');
@@ -71,3 +97,22 @@ popupCardAddCloseButtonElement.addEventListener('click', closePopupCardAdd);
 
 
 console.log (popupCardAddCloseButtonElement);
+console.log(initialCards.length);
+
+const cardTemplate = document.querySelector('.card-template').content;
+const cardsList = document.querySelector('.cards__list');
+// initialCards.forEach(card => console.log(card.link));
+// console.log(cardTemplate);
+for (item of initialCards) {
+  console.log(item.link);
+  const cardItem = cardTemplate.querySelector('.card').cloneNode(true);
+  cardItem.querySelector('.card__image').src = item.link;
+  cardItem.querySelector('.card__title').textContent = item.name;
+  cardsList.append(cardItem);
+}
+const cardItem = cardTemplate.querySelector('.card').cloneNode(true);
+console.log(cardItem);
+cardItem.querySelector('.card__image').src = initialCards[0].link;
+cardItem.querySelector('.card__title').textContent = initialCards[0].name;
+
+cardsList.append(cardItem);
