@@ -40,3 +40,5 @@
 @import url('../blocks/popup/__input/_type/popup__input_type_name.css');
 @import url('../blocks/popup/__input/_type/popup__input_type_profession.css');
 @import url('../blocks/popup/__input/popup__input.css');
+@import url('../blocks/popup/_profile-edit/popup_profile-edit.css');
+@import url('../blocks/popup/_card-add/popup_card-add.css');
