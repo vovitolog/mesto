@@ -25,24 +25,30 @@ const initialCards = [
   }
 ];
 
-const popupCardAdd = document.querySelector('.popup_card-add'); // попап добавления карточки
+const popupCardAdd = document.querySelector('.popup_type_card-add'); // попап добавления карточки
 const popupCardAddCloseButtonElement = popupCardAdd.querySelector('.popup__button-close');
 const popupCardAddOpenButtonElement = document.querySelector('.profile__button-add');
 const popupCardAddSaveButtonElement = popupCardAdd.querySelector('.popup__button-save');
 
-const popupSection = document.querySelector('.popup');
-const popupCloseButtonElement = popupSection.querySelector('.popup__button-close');
+const popupProfileEdit = document.querySelector('.popup_type_profile-edit');
+const popupCloseButtonElement = popupProfileEdit.querySelector('.popup__button-close'); //персонализировать названия кнопок
 const popupOpenButtonElement = document.querySelector('.profile__button-edit');
-const popupSaveButtonElement = popupSection.querySelector('.popup__button-save'); // нужна ли она с учтом того, что на сабмит не вешается событие?
+const popupSaveButtonElement = popupProfileEdit.querySelector('.popup__button-save'); // нужна ли она с учтом того, что на сабмит не вешается событие?
 
-const popupForm = popupSection.querySelector('.popup__form');
+const popupImageView = document.querySelector('.popup_type_image-view');
+const popupImageViewCloseButtonElement = popupImageView.querySelector('.popup__button-close');
+const popupImageViewPicture = popupImageView.querySelector('.popup__image');
+const popupImageViewDescription = popupImageView.querySelector('.popup__description');
+console.log(popupImageView);
+
+const popupForm = popupProfileEdit.querySelector('.popup__form');
 const popupNameInputValue = popupForm.querySelector('.popup__input_type_name');
 const popupProfessionInputValue = popupForm.querySelector('.popup__input_type_profession');
 const profileNameValue = document.querySelector('.profile__name');
 const profileProfessionValue = document.querySelector('.profile__profession');
 
 const popupFormCardAdd = popupCardAdd.querySelector('.popup__form');
-console.log(popupFormCardAdd);
+//console.log(popupFormCardAdd);
 const popupTitleInputValue = popupFormCardAdd.querySelector('.popup__input_type_name');
 const popupLinkInputValue = popupFormCardAdd.querySelector('.popup__input_type_profession');
 
@@ -50,6 +56,9 @@ const openPopup = (popupName) => {
   popupName.classList.add('popup_is-opened');
 };
 
+const closePopup = (popupName) => {
+  popupName.classList.remove('popup_is-opened');
+};
 // Функция заполняет поля формы редактирования профиля данными со страницы
 const fillProfileEditForm = () => {
   popupNameInputValue.value = profileNameValue.textContent;
@@ -58,11 +67,11 @@ const fillProfileEditForm = () => {
 
 const openPopupProfileEdit = () => {
   fillProfileEditForm ();
-  openPopup(popupSection);
+  openPopup(popupProfileEdit);
 }
 
 const closePopupProfileEdit = () => {
-  closePopup(popupSection);
+  closePopup(popupProfileEdit);
 }
 
 const openPopupCardAdd = () => {
@@ -73,11 +82,15 @@ const closePopupCardAdd = () => {
   closePopup(popupCardAdd);
 }
 
-const closePopup = (popupName) => {
-  popupName.classList.remove('popup_is-opened');
-};
+const openPopupImageView = () => {
+  openPopup(popupImageView);
+}
 
-const closePopupOnOuterClick = (event) => {
+const closePopupImageView = () => {
+  closePopup(popupImageView);
+}
+
+const closePopupOnOuterClick = (event) => { // сделать функцию универсальной?
   if (event.target !== event.currentTarget) {
     return;
   }
@@ -102,16 +115,19 @@ const handleCardFormSubmit = (event) => {
 }
 
 
-// Обработка формы редактирования профиля:
+// Обработка формы редактирования профиля (персонализировать названия переменных)
 popupOpenButtonElement.addEventListener('click', openPopupProfileEdit);
 popupCloseButtonElement.addEventListener('click', closePopupProfileEdit);
-popupSection.addEventListener('click', closePopupOnOuterClick);
+popupProfileEdit.addEventListener('click', closePopupOnOuterClick);
 popupForm.addEventListener('submit', handleProfileFormSubmit);
 
 // Обработка формы добавления карточки:
 popupCardAddOpenButtonElement.addEventListener('click', openPopupCardAdd);
 popupCardAddCloseButtonElement.addEventListener('click', closePopupCardAdd);
 popupFormCardAdd.addEventListener('submit', handleCardFormSubmit);
+
+//закрытие попапа с картинкой:
+popupImageViewCloseButtonElement.addEventListener('click', closePopupImageView);
 
 const cardTemplate = document.querySelector('.card-template').content;
 const cardsList = document.querySelector('.cards__list');
@@ -124,13 +140,26 @@ deleteCard = (event) => {
 }
 
 toggleLikeButton = (event) => {
-  const cardItem = event.target.closest('.card__like');
+  const cardItem = event.target.closest('.card__like'); // cardItem - легальное название? тут по идее closest не нужен ввобще
   cardItem.classList.toggle('card__like_is-pressed');
+}
+
+renderPopupImageView = (event) => {
+  popupImageViewPicture.src = event.target.src;
+  const cardItem = event.target.closest('.card');
+  popupImageViewDescription.textContent = cardItem.querySelector('.card__title').textContent;
+  //popupImageViewDescription.textContent = cardItem.querySelector('card__title').textContent;
+  console.log (popupImageViewDescription.textContent);
+  //popupImageViewDescription.textContent = event.target.closest('card__title').textContent;
+  //console.log (popupImageViewPicture.src);
+  openPopupImageView();
+  //console.log(popupImageView.classList);
 }
 
 const setEventListeners = (cardItem) => {
   cardItem.querySelector('.card__button-delete').addEventListener('click', deleteCard);
   cardItem.querySelector('.card__like').addEventListener('click', toggleLikeButton);
+  cardItem.querySelector('.card__image').addEventListener('click', renderPopupImageView);
 }
 // Добавление карточек через массив:
 
