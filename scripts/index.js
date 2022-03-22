@@ -25,30 +25,30 @@ const initialCards = [
   }
 ];
 
-// попап добавления карточки
+// Попап добавления карточки
 const popupCardAdd = document.querySelector('.popup_type_card-add');
 const popupCardAddCloseButtonElement = popupCardAdd.querySelector('.popup__button-close');
 const popupCardAddOpenButtonElement = document.querySelector('.profile__button-add');
 
-// попап редактирования профиля
+// Попап редактирования профиля
 const popupProfileEdit = document.querySelector('.popup_type_profile-edit');
 const popupProfileEditCloseButtonElement = popupProfileEdit.querySelector('.popup__button-close');
 const popupProfileEditOpenButtonElement = document.querySelector('.profile__button-edit');
 
-// попап просмотра изображения
+// Попап просмотра изображения
 const popupImageView = document.querySelector('.popup_type_image-view');
 const popupImageViewCloseButtonElement = popupImageView.querySelector('.popup__button-close');
 const popupImageViewPicture = popupImageView.querySelector('.popup__image');
 const popupImageViewDescription = popupImageView.querySelector('.popup__description');
 
-// форма редактирования профиля
+// Форма редактирования профиля
 const popupFormProfileEdit = popupProfileEdit.querySelector('.popup__form');
 const popupNameInputValue = popupFormProfileEdit.querySelector('.popup__input_type_name');
 const popupProfessionInputValue = popupFormProfileEdit.querySelector('.popup__input_type_profession');
 const profileNameValue = document.querySelector('.profile__name');
 const profileProfessionValue = document.querySelector('.profile__profession');
 
-// форма добаления карточки
+// Форма добаления карточки
 const popupFormCardAdd = popupCardAdd.querySelector('.popup__form');
 const popupTitleInputValue = popupFormCardAdd.querySelector('.popup__input_type_place');
 const popupLinkInputValue = popupFormCardAdd.querySelector('.popup__input_type_url');
@@ -95,9 +95,12 @@ const closePopupImageView = () => {
 
 const closePopupOnOuterClick = (event) => {
   if (event.target !== event.currentTarget) {
+    console.log(event.target);
     return;
   }
   closePopupProfileEdit();
+  closePopupCardAdd();
+  closePopupImageView();
 }
 
 // Сабмит формы редактирования профиля
@@ -129,8 +132,10 @@ popupFormProfileEdit.addEventListener('submit', handleProfileFormSubmit);
 popupCardAddOpenButtonElement.addEventListener('click', openPopupCardAdd);
 popupCardAddCloseButtonElement.addEventListener('click', closePopupCardAdd);
 popupFormCardAdd.addEventListener('submit', handleCardFormSubmit);
+popupCardAdd.addEventListener('click', closePopupOnOuterClick);
 
 // Закрытие попапа с картинкой:
+popupImageView.addEventListener('click', closePopupOnOuterClick);
 popupImageViewCloseButtonElement.addEventListener('click', closePopupImageView);
 
 // Удаление карточки:
