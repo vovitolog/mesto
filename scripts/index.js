@@ -86,6 +86,7 @@ const openPopupProfileEdit = () => {
   fillProfileEditForm ();
   openPopup(popupProfileEdit);
   clearErrorsOnOpen(popupFormProfileEdit);
+  addListenerOnEscape(popupProfileEdit);
 }
 
 const closePopupProfileEdit = () => {
@@ -98,6 +99,7 @@ const openPopupCardAdd = () => {
   popupCardAddSubmitButton.classList.add('popup__button-save_disabled');
   popupCardAddSubmitButton.setAttribute('disabled', true);
   clearErrorsOnOpen(popupFormCardAdd);
+  addListenerOnEscape(popupCardAdd);
 }
 
 const closePopupCardAdd = () => {
@@ -107,6 +109,7 @@ const closePopupCardAdd = () => {
 
 const openPopupImageView = () => {
   openPopup(popupImageView);
+  addListenerOnEscape(popupImageView);
 }
 
 const closePopupImageView = () => {
@@ -122,16 +125,14 @@ const closePopupOnOuterClick = (event) => {
   closePopupImageView();
 }
 
-const closePopupOnEscape = () => {
-  document.addEventListener('keydown', (evt) => {
-    if(evt.key === "Escape") {
-      closePopupProfileEdit();
-      closePopupCardAdd();
-      closePopupImageView();
+const addListenerOnEscape = (popup) => {
+  document.addEventListener('keydown', (event) => {
+    if(event.key === "Escape") {
+      closePopup(popup);
+      document.removeEventListener('keydown', (event));
     }
   });
 }
-closePopupOnEscape ();
 
 // Сабмит формы редактирования профиля
 const handleProfileFormSubmit = (event) => {

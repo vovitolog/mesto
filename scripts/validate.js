@@ -54,7 +54,7 @@ const setInputEventListeners = (formElement, inputSelector, submitButtonSelector
   const inputList = formElement.querySelectorAll(inputSelector);
   const submitButton = formElement.querySelector(submitButtonSelector);
   inputList.forEach(inputElement => {
-    inputElement.addEventListener('input', (evt) => {
+    inputElement.addEventListener('input', (event) => {
       checkValidity(formElement, inputElement);
       toggleButtonState(inputList, submitButton, validationSettings);
     });
@@ -65,8 +65,8 @@ const setInputEventListeners = (formElement, inputSelector, submitButtonSelector
 const enableValidation = ({formSelector, inputSelector, submitButtonSelector}) => {
   const formsList  = document.querySelectorAll(formSelector);
   formsList.forEach(formElement => {
-    formElement.addEventListener('submit', (evt) => {
-      evt.preventDefault();
+    formElement.addEventListener('submit', (event) => {
+      event.preventDefault();
     });
     setInputEventListeners (formElement, inputSelector, submitButtonSelector);
   });
