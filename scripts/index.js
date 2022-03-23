@@ -29,11 +29,13 @@ const initialCards = [
 const popupCardAdd = document.querySelector('.popup_type_card-add');
 const popupCardAddCloseButtonElement = popupCardAdd.querySelector('.popup__button-close');
 const popupCardAddOpenButtonElement = document.querySelector('.profile__button-add');
+const popupCardAddSubmitButton = popupCardAdd.querySelector('.popup__button-save');
 
 // Попап редактирования профиля
 const popupProfileEdit = document.querySelector('.popup_type_profile-edit');
 const popupProfileEditCloseButtonElement = popupProfileEdit.querySelector('.popup__button-close');
 const popupProfileEditOpenButtonElement = document.querySelector('.profile__button-edit');
+const popupProfileEditSubmitButton = popupProfileEdit.querySelector('.popup__button-save');
 
 // Попап просмотра изображения
 const popupImageView = document.querySelector('.popup_type_image-view');
@@ -59,6 +61,18 @@ const fillProfileEditForm = () => {
   popupProfessionInputValue.value = profileProfessionValue.textContent;
 }
 
+// Функция стирает ошибки при открытии
+const clearErrorsOnOpen = (form) => {
+  const inputsToCheck = form.querySelectorAll('.popup__input');
+  inputsToCheck.forEach(inputElement => {
+    if (inputElement.classList.contains('popup__input_type_error')) {
+    inputElement.classList.remove('popup__input_type_error');
+    const errorElement = form.querySelector(`#${inputElement.id}-error`);
+    errorElement.classList.remove('popup__input-error_active');
+    }
+  });
+}
+
 // Закрытие/открытие попавов
 const openPopup = (popupName) => {
   popupName.classList.add('popup_is-opened');
@@ -71,15 +85,19 @@ const closePopup = (popupName) => {
 const openPopupProfileEdit = () => {
   fillProfileEditForm ();
   openPopup(popupProfileEdit);
+  clearErrorsOnOpen(popupFormProfileEdit);
 }
 
 const closePopupProfileEdit = () => {
   closePopup(popupProfileEdit);
-  popupProfileEdit.reset();
+  popupFormProfileEdit.reset();
 }
 
 const openPopupCardAdd = () => {
   openPopup(popupCardAdd);
+  popupCardAddSubmitButton.classList.add('popup__button-save_disabled');
+  popupCardAddSubmitButton.setAttribute('disabled', true);
+  clearErrorsOnOpen(popupFormCardAdd);
 }
 
 const closePopupCardAdd = () => {
@@ -97,7 +115,6 @@ const closePopupImageView = () => {
 
 const closePopupOnOuterClick = (event) => {
   if (event.target !== event.currentTarget) {
-    console.log(event.target);
     return;
   }
   closePopupProfileEdit();
@@ -108,7 +125,6 @@ const closePopupOnOuterClick = (event) => {
 const closePopupOnEscape = () => {
   document.addEventListener('keydown', (evt) => {
     if(evt.key === "Escape") {
-      console.log('testtttt');
       closePopupProfileEdit();
       closePopupCardAdd();
       closePopupImageView();
