@@ -49,17 +49,18 @@ const clearErrorsOnOpen = (form) => {
 // Закрытие/открытие попавов
 const openPopup = (popupName) => {
   popupName.classList.add('popup_is-opened');
+  document.addEventListener('keydown', closeByEscape);
 };
 
 const closePopup = (popupName) => {
   popupName.classList.remove('popup_is-opened');
+  document.removeEventListener('keydown', closeByEscape);
 };
 
 const openPopupProfileEdit = () => {
   fillProfileEditForm ();
   openPopup(popupProfileEdit);
   clearErrorsOnOpen(popupFormProfileEdit);
-  addListenerOnEscape(popupProfileEdit);
 }
 
 const closePopupProfileEdit = () => {
@@ -72,7 +73,6 @@ const openPopupCardAdd = () => {
   popupCardAddSubmitButton.classList.add('popup__button-save_disabled');
   popupCardAddSubmitButton.setAttribute('disabled', true);
   clearErrorsOnOpen(popupFormCardAdd);
-  addListenerOnEscape(popupCardAdd);
 }
 
 const closePopupCardAdd = () => {
@@ -82,7 +82,6 @@ const closePopupCardAdd = () => {
 
 const openPopupImageView = () => {
   openPopup(popupImageView);
-  addListenerOnEscape(popupImageView);
 }
 
 const closePopupImageView = () => {
@@ -96,13 +95,11 @@ const closePopupOnOuterClick = (event) => {
    closePopup(event.target);
 }
 
-const addListenerOnEscape = (popup) => {
-  document.addEventListener('keydown', (event) => {
-    if(event.key === "Escape") {
-      closePopup(popup);
-      document.removeEventListener('keydown', (event));
-    }
-  });
+const closeByEscape= (event) => {
+  if (event.key === "Escape") {
+    const popup = document.querySelector('.popup_is-opened')
+    closePopup(popup);
+  }
 }
 
 // Сабмит формы редактирования профиля
