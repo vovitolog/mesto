@@ -120,9 +120,7 @@ const closePopupOnOuterClick = (event) => {
   if (event.target !== event.currentTarget) {
     return;
   }
-  closePopupProfileEdit();
-  closePopupCardAdd();
-  closePopupImageView();
+   closePopup(event.target);
 }
 
 const addListenerOnEscape = (popup) => {
