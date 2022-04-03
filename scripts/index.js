@@ -1,3 +1,6 @@
+import {FormValidator} from './FormValidator.js';
+
+
 // Попап добавления карточки
 const popupCardAdd = document.querySelector('.popup_type_card-add');
 const popupCardAddCloseButtonElement = popupCardAdd.querySelector('.popup__button-close');
@@ -27,6 +30,21 @@ const profileProfessionValue = document.querySelector('.profile__profession');
 const popupFormCardAdd = popupCardAdd.querySelector('.popup__form');
 const popupTitleInputValue = popupFormCardAdd.querySelector('.popup__input_type_place');
 const popupLinkInputValue = popupFormCardAdd.querySelector('.popup__input_type_url');
+
+const validationSettings = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button-save',
+  inactiveButtonClass: 'popup__button-save_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__input-error_active'
+}
+
+const profileEditValidator = new FormValidator(validationSettings, popupFormProfileEdit);
+const CardAddValidator = new FormValidator(validationSettings, popupFormCardAdd);
+
+profileEditValidator.enableValidation();
+CardAddValidator.enableValidation();
 
 // Функция заполняет поля формы редактирования профиля данными со страницы
 const fillProfileEditForm = () => {
@@ -97,7 +115,7 @@ const closePopupOnOuterClick = (event) => {
 
 const closeByEscape= (event) => {
   if (event.key === "Escape") {
-    const popup = document.querySelector('.popup_is-opened')
+    const popup = document.querySelector('.popup_is-opened');
     closePopup(popup);
   }
 }
