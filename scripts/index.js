@@ -1,5 +1,6 @@
+import {initialCards} from './cards.js';
 import {FormValidator} from './FormValidator.js';
-
+import {Card} from './Card.js';
 
 // Попап добавления карточки
 const popupCardAdd = document.querySelector('.popup_type_card-add');
@@ -155,54 +156,24 @@ popupCardAdd.addEventListener('click', closePopupOnOuterClick);
 popupImageView.addEventListener('click', closePopupOnOuterClick);
 popupImageViewCloseButtonElement.addEventListener('click', closePopupImageView);
 
-// Удаление карточки:
-const deleteCard = (event) => {
-  const cardItem = event.target.closest('.card');
-  cardItem.remove();
-}
+// Добавление карточек
 
-// Лайк карточки
-const toggleLikeButton = (event) => {
-  event.target.classList.toggle('card__like_is-pressed');
-}
-
-// Рендер попапа с картинкой
-const renderPopupImageView = (event) => {
-  popupImageViewPicture.src = event.target.src;
-  const cardItem = event.target.closest('.card');
-  const cardTitleText  = cardItem.querySelector('.card__title').textContent;
-  popupImageViewPicture.alt = cardTitleText;
-  popupImageViewDescription.textContent = cardTitleText;
+const renderPopupImageView = (name, link) => {
+  popupImageViewPicture.src = link;
+  popupImageViewPicture.alt = name;
+  popupImageViewDescription.textContent = name;
   openPopupImageView();
 }
 
-// Добавление слушателей на карточки
-const setEventListeners = (cardItem) => {
-  cardItem.querySelector('.card__button-delete').addEventListener('click', deleteCard);
-  cardItem.querySelector('.card__like').addEventListener('click', toggleLikeButton);
-  cardItem.querySelector('.card__image').addEventListener('click', renderPopupImageView);
-}
-
-// Добавление карточек
-const cardTemplate = document.querySelector('.card-template').content;
 const cardsList = document.querySelector('.cards__list');
 
-const renderCard = (item) => {
-    const cardItem = cardTemplate.querySelector('.card').cloneNode(true);
-    const cardImage = cardItem.querySelector('.card__image');
-    cardImage.src = item.link;
-    cardImage.alt = item.name;
-    cardItem.querySelector('.card__title').textContent = item.name;
-    setEventListeners(cardItem);
-    return cardItem;
-}
-
 const cardAdd = (cardItem, position) => {
-  const cardToAdd = renderCard (cardItem);
+  const cardAdd = new Card(cardItem, '.card-template', renderPopupImageView);
+  const cardItemtoAdd = cardAdd.renderCard();
   if (position === 'begin') {
-    cardsList.prepend(cardToAdd);
+    cardsList.prepend(cardItemtoAdd);
   } else {
-  cardsList.append(cardToAdd);
+  cardsList.append(cardItemtoAdd);
   }
 }
 
@@ -211,6 +182,5 @@ const renderCards = (items) => {
 }
 
 renderCards (initialCards);
-
 
 

@@ -8,10 +8,9 @@ export class FormValidator {
   _showError(inputElement, errorMessage) {
     const errorElement = this._form.querySelector(`#${inputElement.id}-error`);
     errorElement.textContent = errorMessage;
-    errorElement.classList.add(this._settings.errorClass);//деструктуризация нужна?
-    inputElement.classList.add(this._settings.inputErrorClass); //деструктуризация нужна?
+    errorElement.classList.add(this._settings.errorClass);
+    inputElement.classList.add(this._settings.inputErrorClass);
   }
-
 
   _hideError(inputElement) {
     const errorElement = this._form.querySelector(`#${inputElement.id}-error`);
@@ -21,16 +20,15 @@ export class FormValidator {
   }
 
   _checkValidity(inputElement) {
-    const isInputNotValid = !inputElement.validity.valid; //нужна ли отдельная константа или сразу сравнивать с !inputElement.validity.valid ?
+    const isInputNotValid = !inputElement.validity.valid;
     if (isInputNotValid) {
       const errorMessage = inputElement.validationMessage;
-      this._showError(inputElement, errorMessage);//нужно ди вызывыть форму?
+      this._showError(inputElement, errorMessage);
     } else {
-      this._hideError(inputElement); //нужно ди вызывыть форму?
+      this._hideError(inputElement);
     }
   }
 
-  // Надо сделать отдельные фуекции для включения и отключения когда класс заработает!
   _toggleButtonState(inputList, submitButton) {
     const hasInvalidInput = Array.from(inputList).some((inputElement) => {
       return !inputElement.validity.valid;
@@ -45,21 +43,18 @@ export class FormValidator {
     }
   }
 
-
   _setInputEventListeners() {
-    const inputList = this._form.querySelectorAll(this._settings.inputSelector); // положить в this?
-    const submitButton = this._form.querySelector(this._settings.submitButtonSelector); // положить в this?
+    const inputList = this._form.querySelectorAll(this._settings.inputSelector);
+    const submitButton = this._form.querySelector(this._settings.submitButtonSelector);
     inputList.forEach(inputElement => {
-      console.log(inputElement);
-      inputElement.addEventListener('input', (event) => { // убираем event из скобок?
-        this._checkValidity(inputElement); //нужно ди вызывыть форму?
-        this._toggleButtonState(inputList, submitButton); //просто settings?
+        inputElement.addEventListener('input', () => {
+        this._checkValidity(inputElement);
+        this._toggleButtonState(inputList, submitButton);
       });
     });
   }
 
   enableValidation() {
-    console.log(this._form);
-    this._setInputEventListeners (); //нужно ли вешать на submitButtonSelector?
+    this._setInputEventListeners ();
   }
 }
