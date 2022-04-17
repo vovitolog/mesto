@@ -42,27 +42,15 @@ const validationSettings = {
 }
 
 const profileEditValidator = new FormValidator(validationSettings, popupFormProfileEdit);
-const CardAddValidator = new FormValidator(validationSettings, popupFormCardAdd);
+const cardAddValidator = new FormValidator(validationSettings, popupFormCardAdd);
 
 profileEditValidator.enableValidation();
-CardAddValidator.enableValidation();
+cardAddValidator.enableValidation();
 
 // Функция заполняет поля формы редактирования профиля данными со страницы
 const fillProfileEditForm = () => {
   popupNameInputValue.value = profileNameValue.textContent;
   popupProfessionInputValue.value = profileProfessionValue.textContent;
-}
-
-// Функция стирает ошибки при открытии
-const clearErrorsOnOpen = (form) => {
-  const inputsToCheck = form.querySelectorAll('.popup__input');
-  inputsToCheck.forEach(inputElement => {
-    if (inputElement.classList.contains('popup__input_type_error')) {
-    inputElement.classList.remove('popup__input_type_error');
-    const errorElement = form.querySelector(`#${inputElement.id}-error`);
-    errorElement.classList.remove('popup__input-error_active');
-    }
-  });
 }
 
 // Закрытие/открытие попавов
@@ -77,9 +65,9 @@ const closePopup = (popupName) => {
 };
 
 const openPopupProfileEdit = () => {
-  fillProfileEditForm ();
+  profileEditValidator.resetValidation();
+  fillProfileEditForm();
   openPopup(popupProfileEdit);
-  clearErrorsOnOpen(popupFormProfileEdit);
 }
 
 const closePopupProfileEdit = () => {
@@ -88,10 +76,8 @@ const closePopupProfileEdit = () => {
 }
 
 const openPopupCardAdd = () => {
+  cardAddValidator.resetValidation();
   openPopup(popupCardAdd);
-  popupCardAddSubmitButton.classList.add('popup__button-save_disabled');
-  popupCardAddSubmitButton.setAttribute('disabled', true);
-  clearErrorsOnOpen(popupFormCardAdd);
 }
 
 const closePopupCardAdd = () => {

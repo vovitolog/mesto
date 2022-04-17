@@ -12,6 +12,7 @@ export class Card {
 
   _deleteCard = () => {
     this._cardItem.remove();
+    this._cardItem = null;
   };
 
   _setEventListeners() {
@@ -19,11 +20,12 @@ export class Card {
 
     deleteButton.addEventListener("click", this._deleteCard);
     this._likeButton.addEventListener("click", this._toggleLikeButton);
-    this._cardImage.addEventListener("click", () => this._imageCardClick(this._name, this._link));
+    this._cardImage.addEventListener("click", () =>
+      this._imageCardClick(this._name, this._link)
+    );
   }
 
   renderCard() {
-
     this._cardItem = this._cardTemplate.querySelector(".card").cloneNode(true);
     this._likeButton = this._cardItem.querySelector(".card__like");
     this._cardImage = this._cardItem.querySelector(".card__image");
