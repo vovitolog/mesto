@@ -1,6 +1,7 @@
-import {initialCards} from './cards.js';
-import {FormValidator} from './FormValidator.js';
-import {Card} from './Card.js';
+import {initialCards} from '../utils/constants.js';
+import {FormValidator} from '../components/FormValidator.js';
+import {Card} from '../components/Card.js';
+import {Section} from '../components/Section.js';
 
 // Попап добавления карточки
 const popupCardAdd = document.querySelector('.popup_type_card-add');
@@ -142,7 +143,6 @@ popupCardAdd.addEventListener('click', closePopupOnOuterClick);
 popupImageView.addEventListener('click', closePopupOnOuterClick);
 popupImageViewCloseButtonElement.addEventListener('click', closePopupImageView);
 
-// Добавление карточек
 
 const renderPopupImageView = (name, link) => {
   popupImageViewPicture.src = link;
@@ -150,6 +150,18 @@ const renderPopupImageView = (name, link) => {
   popupImageViewDescription.textContent = name;
   openPopupImageView();
 }
+
+const myList = new Section({items: initialCards, renderer: (data) => {
+  const item = new Card(data, '.card-template', renderPopupImageView);
+  const itemToAdd = item.renderCard();
+  myList.addItem(itemToAdd);
+}}, '.cards__list');
+
+myList.renderInitialItems();
+
+// Добавление карточек
+/*
+
 
 const cardsList = document.querySelector('.cards__list');
 
@@ -167,6 +179,8 @@ const renderCards = (items) => {
   items.forEach(cardAdd);
 }
 
-renderCards (initialCards);
+renderCards (initialCards); */
+
+
 
 
