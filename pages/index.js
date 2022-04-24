@@ -2,6 +2,8 @@ import {initialCards} from '../utils/constants.js';
 import {FormValidator} from '../components/FormValidator.js';
 import {Card} from '../components/Card.js';
 import {Section} from '../components/Section.js';
+import { PopupWithImage } from '../components/PopupWithImage.js';
+import { Popup } from '../components/Popup.js';
 
 // Попап добавления карточки
 const popupCardAdd = document.querySelector('.popup_type_card-add');
@@ -15,11 +17,6 @@ const popupProfileEditCloseButtonElement = popupProfileEdit.querySelector('.popu
 const popupProfileEditOpenButtonElement = document.querySelector('.profile__button-edit');
 const popupProfileEditSubmitButton = popupProfileEdit.querySelector('.popup__button-save');
 
-// Попап просмотра изображения
-const popupImageView = document.querySelector('.popup_type_image-view');
-const popupImageViewCloseButtonElement = popupImageView.querySelector('.popup__button-close');
-const popupImageViewPicture = popupImageView.querySelector('.popup__image');
-const popupImageViewDescription = popupImageView.querySelector('.popup__description');
 
 // Форма редактирования профиля
 const popupFormProfileEdit = popupProfileEdit.querySelector('.popup__form');
@@ -47,6 +44,20 @@ const cardAddValidator = new FormValidator(validationSettings, popupFormCardAdd)
 
 profileEditValidator.enableValidation();
 cardAddValidator.enableValidation();
+
+const popupImage = new PopupWithImage( {
+  name: 'Архыз',
+  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
+}, '.popup_type_image-view');
+console.log(popupImage);
+popupImage.open();
+
+// Попап просмотра изображения
+const popupImageView = document.querySelector('.popup_type_image-view');
+const popupImageViewCloseButtonElement = popupImageView.querySelector('.popup__button-close');
+const popupImageViewPicture = popupImageView.querySelector('.popup__image');
+const popupImageViewDescription = popupImageView.querySelector('.popup__description');
+
 
 // Функция заполняет поля формы редактирования профиля данными со страницы
 const fillProfileEditForm = () => {
@@ -129,19 +140,19 @@ const handleCardFormSubmit = (event) => {
 
 // Обработка формы редактирования профиля
 popupProfileEditOpenButtonElement.addEventListener('click', openPopupProfileEdit);
-popupProfileEditCloseButtonElement.addEventListener('click', closePopupProfileEdit);
+popupProfileEditCloseButtonElement.addEventListener('click', closePopupProfileEdit); //навесили
 popupProfileEdit.addEventListener('click', closePopupOnOuterClick);
 popupFormProfileEdit.addEventListener('submit', handleProfileFormSubmit);
 
 // Обработка формы добавления карточки:
 popupCardAddOpenButtonElement.addEventListener('click', openPopupCardAdd);
-popupCardAddCloseButtonElement.addEventListener('click', closePopupCardAdd);
+popupCardAddCloseButtonElement.addEventListener('click', closePopupCardAdd); //навесили
 popupFormCardAdd.addEventListener('submit', handleCardFormSubmit);
 popupCardAdd.addEventListener('click', closePopupOnOuterClick);
 
 // Закрытие попапа с картинкой:
 popupImageView.addEventListener('click', closePopupOnOuterClick);
-popupImageViewCloseButtonElement.addEventListener('click', closePopupImageView);
+popupImageViewCloseButtonElement.addEventListener('click', closePopupImageView); //навесили
 
 
 const renderPopupImageView = (name, link) => {
