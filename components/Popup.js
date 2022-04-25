@@ -26,6 +26,7 @@ _closePopupOnOuterClick(event) {
     this._popupName.classList.add('popup_is-opened');
     document.addEventListener('keydown', this._handleEscClose);
     document.addEventListener('click', this._closePopupOnOuterClick);
+    this.setEventListeners();
   }
 
   close () {

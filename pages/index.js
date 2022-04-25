@@ -4,17 +4,19 @@ import {Card} from '../components/Card.js';
 import {Section} from '../components/Section.js';
 import { PopupWithImage } from '../components/PopupWithImage.js';
 import { Popup } from '../components/Popup.js';
+import { PopupWithForm } from '../components/PopupWithForm.js';
+import {UserInfo} from '../components/UserInfo.js';
 
 // Попап добавления карточки
 const popupCardAdd = document.querySelector('.popup_type_card-add');
 const popupCardAddCloseButtonElement = popupCardAdd.querySelector('.popup__button-close');
-const popupCardAddOpenButtonElement = document.querySelector('.profile__button-add');
+const popupCardAddOpenButtonElement = document.querySelector('.profile__button-add'); // ищем кнопку в документе
 const popupCardAddSubmitButton = popupCardAdd.querySelector('.popup__button-save');
 
 // Попап редактирования профиля
 const popupProfileEdit = document.querySelector('.popup_type_profile-edit');
 const popupProfileEditCloseButtonElement = popupProfileEdit.querySelector('.popup__button-close');
-const popupProfileEditOpenButtonElement = document.querySelector('.profile__button-edit');
+const popupProfileEditOpenButtonElement = document.querySelector('.profile__button-edit'); // ищем кнопку в документе
 const popupProfileEditSubmitButton = popupProfileEdit.querySelector('.popup__button-save');
 
 
@@ -45,18 +47,12 @@ const cardAddValidator = new FormValidator(validationSettings, popupFormCardAdd)
 profileEditValidator.enableValidation();
 cardAddValidator.enableValidation();
 
-const popupImage = new PopupWithImage( {
-  name: 'Архыз',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-}, '.popup_type_image-view');
-console.log(popupImage);
-popupImage.open();
 
 // Попап просмотра изображения
-const popupImageView = document.querySelector('.popup_type_image-view');
-const popupImageViewCloseButtonElement = popupImageView.querySelector('.popup__button-close');
-const popupImageViewPicture = popupImageView.querySelector('.popup__image');
-const popupImageViewDescription = popupImageView.querySelector('.popup__description');
+//const popupImageView = document.querySelector('.popup_type_image-view');
+//const popupImageViewCloseButtonElement = popupImageView.querySelector('.popup__button-close');
+//const popupImageViewPicture = popupImageView.querySelector('.popup__image');
+//const popupImageViewDescription = popupImageView.querySelector('.popup__description');
 
 
 // Функция заполняет поля формы редактирования профиля данными со страницы
@@ -97,13 +93,13 @@ const closePopupCardAdd = () => {
   popupFormCardAdd.reset();
 }
 
-const openPopupImageView = () => {
+/* const openPopupImageView = () => {
   openPopup(popupImageView);
 }
 
 const closePopupImageView = () => {
   closePopup(popupImageView);
-}
+} */
 
 const closePopupOnOuterClick = (event) => {
   if (event.target !== event.currentTarget) {
@@ -127,17 +123,6 @@ const handleProfileFormSubmit = (event) => {
   closePopupProfileEdit();
 }
 
-// Сабмит формы добавления карточки
-const handleCardFormSubmit = (event) => {
-  event.preventDefault();
-  const cardItem = {};
-  cardItem.name = popupTitleInputValue.value;
-  cardItem.link = popupLinkInputValue.value;
-  cardAdd(cardItem, 'begin');
-  popupFormCardAdd.reset();
-  closePopupCardAdd();
-}
-
 // Обработка формы редактирования профиля
 popupProfileEditOpenButtonElement.addEventListener('click', openPopupProfileEdit);
 popupProfileEditCloseButtonElement.addEventListener('click', closePopupProfileEdit); //навесили
@@ -147,19 +132,35 @@ popupFormProfileEdit.addEventListener('submit', handleProfileFormSubmit);
 // Обработка формы добавления карточки:
 popupCardAddOpenButtonElement.addEventListener('click', openPopupCardAdd);
 popupCardAddCloseButtonElement.addEventListener('click', closePopupCardAdd); //навесили
-popupFormCardAdd.addEventListener('submit', handleCardFormSubmit);
+//popupFormCardAdd.addEventListener('submit', handleCardFormSubmit);
 popupCardAdd.addEventListener('click', closePopupOnOuterClick);
 
 // Закрытие попапа с картинкой:
-popupImageView.addEventListener('click', closePopupOnOuterClick);
-popupImageViewCloseButtonElement.addEventListener('click', closePopupImageView); //навесили
+//popupImageView.addEventListener('click', closePopupOnOuterClick);
+//popupImageViewCloseButtonElement.addEventListener('click', closePopupImageView); //навесили
 
+const popupImage = new PopupWithImage( {
+  name: 'Архыз',
+  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
+}, '.popup_type_image-view');
+console.log(popupImage);
+popupImage.open();
 
-const renderPopupImageView = (name, link) => {
+/* const renderPopupImageView = (name, link) => {
   popupImageViewPicture.src = link;
   popupImageViewPicture.alt = name;
   popupImageViewDescription.textContent = name;
   openPopupImageView();
+} */
+
+//Перенести функцию в utils? :
+
+const renderPopupImageView = (name, link) => {
+  const popupImage = new PopupWithImage({
+    name,
+    link}, '.popup_type_image-view');
+  console.log(popupImage);
+  popupImage.open();
 }
 
 const myList = new Section({items: initialCards, renderer: (data) => {
@@ -169,6 +170,31 @@ const myList = new Section({items: initialCards, renderer: (data) => {
 }}, '.cards__list');
 
 myList.renderInitialItems();
+
+
+console.log(myList);
+
+const popupForm = new PopupWithForm({popupSelector: '.popup_type_card-add', handleFormSubmit: (data) => {
+  const cardItem = {};
+  cardItem.name = data['place-name'];
+  cardItem.link = data['image-url'];
+  const item = new Card(cardItem, '.card-template', renderPopupImageView);
+  const itemToAdd = item.renderCard();
+  myList.addItem(itemToAdd);
+}});
+popupForm.open();
+
+
+// Сабмит формы добавления карточки
+//const handleCardFormSubmit = (event) => {
+ // event.preventDefault();
+ // const cardItem = {};
+ // cardItem.name = popupTitleInputValue.value;
+ // cardItem.link = popupLinkInputValue.value;
+//  cardAdd(cardItem, 'begin');
+//  popupFormCardAdd.reset();
+//  closePopupCardAdd();
+//}
 
 // Добавление карточек
 /*

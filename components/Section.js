@@ -12,4 +12,6 @@ export class Section {
   addItem(element) {
     this._container.append(element);
   }
+
+  //сделать additem prepend?
 }
