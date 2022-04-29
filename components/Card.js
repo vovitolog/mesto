@@ -1,9 +1,9 @@
 export class Card {
-  constructor(data, cardTemplateSelector, imageCardClick) {
+  constructor(data, cardTemplateSelector, handleCardClick) {
     this._cardTemplate = document.querySelector(cardTemplateSelector).content;
     this._name = data.name;
     this._link = data.link;
-    this._imageCardClick = imageCardClick;
+    this._handleCardClick = handleCardClick;
   }
 
   _toggleLikeButton = () => {
@@ -21,7 +21,7 @@ export class Card {
     deleteButton.addEventListener("click", this._deleteCard);
     this._likeButton.addEventListener("click", this._toggleLikeButton);
     this._cardImage.addEventListener("click", () =>
-      this._imageCardClick(this._name, this._link)
+      this._handleCardClick(this._name, this._link)
     );
   }
 

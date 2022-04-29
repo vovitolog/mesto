@@ -15,6 +15,8 @@ import { PopupWithImage } from "../components/PopupWithImage.js";
 import { PopupWithForm } from "../components/PopupWithForm.js";
 import { UserInfo } from "../components/UserInfo.js";
 
+// Валидация форм
+
 const profileEditValidator = new FormValidator(
   validationSettings,
   popupFormProfileEdit
@@ -27,22 +29,16 @@ const cardAddValidator = new FormValidator(
 profileEditValidator.enableValidation();
 cardAddValidator.enableValidation();
 
-const renderPopupImageView = (name, link) => {
-  const popupImage = new PopupWithImage(
-    {
-      name,
-      link,
-    },
-    ".popup_type_image-view"
-  );
-  popupImage.open();
-};
+  const popupImage = new PopupWithImage(".popup_type_image-view");
+  popupImage.setEventListeners();
 
 const myList = new Section(
   {
     items: initialCards,
     renderer: (data) => {
-      const item = new Card(data, ".card-template", renderPopupImageView);
+      const item = new Card(data, ".card-template",  (name, link) =>  {
+        popupImage.open(name, link);
+      });
       const itemToAdd = item.renderCard();
       myList.addItem(itemToAdd);
     },
@@ -58,11 +54,14 @@ const popupCardAddClass = new PopupWithForm({
     const cardItem = {};
     cardItem.name = data["place-name"];
     cardItem.link = data["image-url"];
-    const item = new Card(cardItem, ".card-template", renderPopupImageView);
+    const item = new Card(cardItem, ".card-template", (name, link) => {
+      popupImage.open(name, link);
+    });
     const itemToAdd = item.renderCard();
     myList.addItem(itemToAdd, "begin");
-  },
+  }
 });
+popupCardAddClass.setEventListeners();
 
 const userInfo = new UserInfo({
   nameSelector: ".profile__name",
@@ -76,8 +75,9 @@ const popupProfileEditForm = new PopupWithForm({
       name: popupNameInputValue.value,
       profession: popupProfessionInputValue.value,
     });
-  },
+  }
 });
+popupProfileEditForm.setEventListeners();
 
 popupCardAddOpenButtonElement.addEventListener("click", () => {
   cardAddValidator.resetValidation();
