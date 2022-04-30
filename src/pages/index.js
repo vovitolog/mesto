@@ -1,3 +1,5 @@
+import './../pages/index.css';
+
 import {
   initialCards,
   validationSettings,
@@ -15,8 +17,6 @@ import { PopupWithImage } from "../components/PopupWithImage.js";
 import { PopupWithForm } from "../components/PopupWithForm.js";
 import { UserInfo } from "../components/UserInfo.js";
 
-// Валидация форм
-
 const profileEditValidator = new FormValidator(
   validationSettings,
   popupFormProfileEdit
@@ -29,14 +29,14 @@ const cardAddValidator = new FormValidator(
 profileEditValidator.enableValidation();
 cardAddValidator.enableValidation();
 
-  const popupImage = new PopupWithImage(".popup_type_image-view");
-  popupImage.setEventListeners();
+const popupImage = new PopupWithImage(".popup_type_image-view");
+popupImage.setEventListeners();
 
 const myList = new Section(
   {
     items: initialCards,
     renderer: (data) => {
-      const item = new Card(data, ".card-template",  (name, link) =>  {
+      const item = new Card(data, ".card-template", (name, link) => {
         popupImage.open(name, link);
       });
       const itemToAdd = item.renderCard();
@@ -59,7 +59,7 @@ const popupCardAddClass = new PopupWithForm({
     });
     const itemToAdd = item.renderCard();
     myList.addItem(itemToAdd, "begin");
-  }
+  },
 });
 popupCardAddClass.setEventListeners();
 
@@ -75,7 +75,7 @@ const popupProfileEditForm = new PopupWithForm({
       name: popupNameInputValue.value,
       profession: popupProfessionInputValue.value,
     });
-  }
+  },
 });
 popupProfileEditForm.setEventListeners();
 
