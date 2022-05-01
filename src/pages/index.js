@@ -1,4 +1,4 @@
-import './../pages/index.css';
+import "./../pages/index.css";
 
 import {
   initialCards,
@@ -32,13 +32,18 @@ cardAddValidator.enableValidation();
 const popupImage = new PopupWithImage(".popup_type_image-view");
 popupImage.setEventListeners();
 
+const createCard = (data) => {
+  const card = new Card(data, ".card-template", (name, link) => {
+    popupImage.open(name, link);
+  });
+  return card;
+};
+
 const myList = new Section(
   {
     items: initialCards,
     renderer: (data) => {
-      const item = new Card(data, ".card-template", (name, link) => {
-        popupImage.open(name, link);
-      });
+      const item = createCard(data);
       const itemToAdd = item.renderCard();
       myList.addItem(itemToAdd);
     },
@@ -54,9 +59,7 @@ const popupCardAddClass = new PopupWithForm({
     const cardItem = {};
     cardItem.name = data["place-name"];
     cardItem.link = data["image-url"];
-    const item = new Card(cardItem, ".card-template", (name, link) => {
-      popupImage.open(name, link);
-    });
+    const item = createCard(cardItem);
     const itemToAdd = item.renderCard();
     myList.addItem(itemToAdd, "begin");
   },
@@ -70,10 +73,10 @@ const userInfo = new UserInfo({
 
 const popupProfileEditForm = new PopupWithForm({
   popupSelector: ".popup_type_profile-edit",
-  handleFormSubmit: () => {
+  handleFormSubmit: (data) => {
     userInfo.setUserInfo({
-      name: popupNameInputValue.value,
-      profession: popupProfessionInputValue.value,
+      name: data.name,
+      profession: data.profession,
     });
   },
 });
