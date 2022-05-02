@@ -36,16 +36,15 @@ const createCard = (data) => {
   const card = new Card(data, ".card-template", (name, link) => {
     popupImage.open(name, link);
   });
-  return card;
+  return card.renderCard();  
 };
 
 const myList = new Section(
   {
     items: initialCards,
     renderer: (data) => {
-      const item = createCard(data);
-      const itemToAdd = item.renderCard();
-      myList.addItem(itemToAdd);
+      const item = createCard(data);      
+      myList.addItem(item);
     },
   },
   ".cards__list"
@@ -59,9 +58,8 @@ const popupCardAddClass = new PopupWithForm({
     const cardItem = {};
     cardItem.name = data["place-name"];
     cardItem.link = data["image-url"];
-    const item = createCard(cardItem);
-    const itemToAdd = item.renderCard();
-    myList.addItem(itemToAdd, "begin");
+    const item = createCard(cardItem);    
+    myList.addItem(item, "begin");
   },
 });
 popupCardAddClass.setEventListeners();
@@ -74,10 +72,7 @@ const userInfo = new UserInfo({
 const popupProfileEditForm = new PopupWithForm({
   popupSelector: ".popup_type_profile-edit",
   handleFormSubmit: (data) => {
-    userInfo.setUserInfo({
-      name: data.name,
-      profession: data.profession,
-    });
+    userInfo.setUserInfo(data);    
   },
 });
 popupProfileEditForm.setEventListeners();
