@@ -5,8 +5,10 @@ import {
   validationSettings,
   popupCardAddOpenButtonElement,
   popupProfileEditOpenButtonElement,
+  popupPhotoEditOpenHoverElement,
   popupFormCardAdd,
   popupFormProfileEdit,
+  popupFormPhotoEdit,
   popupNameInputValue,
   popupProfessionInputValue,
 } from "../utils/constants.js";
@@ -16,6 +18,7 @@ import { Section } from "../components/Section.js";
 import { PopupWithImage } from "../components/PopupWithImage.js";
 import { PopupWithForm } from "../components/PopupWithForm.js";
 import { UserInfo } from "../components/UserInfo.js";
+import { Api} from "../components/Api.js";
 
 const profileEditValidator = new FormValidator(
   validationSettings,
@@ -26,8 +29,14 @@ const cardAddValidator = new FormValidator(
   popupFormCardAdd
 );
 
+const photoEditValidator = new FormValidator(
+  validationSettings,
+  popupFormPhotoEdit
+);
+
 profileEditValidator.enableValidation();
 cardAddValidator.enableValidation();
+photoEditValidator.enableValidation();
 
 const popupImage = new PopupWithImage(".popup_type_image-view");
 popupImage.setEventListeners();
@@ -39,18 +48,15 @@ const createCard = (data) => {
   return card.renderCard();  
 };
 
-const myList = new Section(
-  {
-    items: initialCards,
-    renderer: (data) => {
+const myList = new Section(      
+     (data) => {
       const item = createCard(data);      
       myList.addItem(item);
     },
-  },
   ".cards__list"
 );
 
-myList.renderInitialItems();
+myList.renderInitialItems(initialCards);
 
 const popupCardAddClass = new PopupWithForm({
   popupSelector: ".popup_type_card-add",
@@ -77,6 +83,20 @@ const popupProfileEditForm = new PopupWithForm({
 });
 popupProfileEditForm.setEventListeners();
 
+const popupPhotoEdit = new PopupWithForm({
+  popupSelector: ".popup_type_photo-edit",
+
+
+  //переделать сабмит!
+
+
+  handleFormSubmit: () => { 
+    
+  },
+});
+popupPhotoEdit.setEventListeners();
+
+  
 popupCardAddOpenButtonElement.addEventListener("click", () => {
   cardAddValidator.resetValidation();
   popupCardAddClass.open();
@@ -89,3 +109,32 @@ popupProfileEditOpenButtonElement.addEventListener("click", () => {
   profileEditValidator.resetValidation();
   popupProfileEditForm.open();
 });
+
+popupPhotoEditOpenHoverElement.addEventListener("click", () => {
+  //photoEditValidator.resetValidation();
+  popupPhotoEdit.open();
+})
+
+// Создаём копию класса Api
+
+const api = new Api({
+  baseUrl: "https://mesto.nomoreparties.co/v1/cohort-40",
+  headers: {
+    authorization: " f67242ed-0af1-4508-b1a9-28f5e424436c",
+    "Content-Type": "application/json",
+  },
+});
+
+// Генерация изначальных карточек
+
+api.getInitialCards()
+  .then((result) => {
+    renderInitialCards(result);
+  })
+  .catch((err) => {
+    console.log(err); // выведем ошибку в консоль - сделать универсальную функцию?
+  }); 
+
+  const renderInitialCards = (items) => {
+    //console.log(JSON.stringify(items));
+  }

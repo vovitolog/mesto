@@ -19,6 +19,11 @@
                 alt="Фото профиля"
                 src="<%=require('./images/profile_image.jpg')%>"
               />
+              <img
+                class="profile__photo-edit"
+                alt="Кнопка смены фото профиля"
+                src="<%=require('./images/edit_button.svg')%>"
+              />
             </div>
             <div class="profile__info">
               <div class="profile__name-wrapper">
@@ -130,6 +135,54 @@
           <p class="popup__description"></p>
         </div>
       </section>
+
+      <section class="popup popup_type_photo-edit"> 
+        <div class="popup__container">
+          <button class="popup__button-close"></button>
+          <div class="popup__content">
+            <h2 class="popup__title">Обновить аватар</h2>
+            <form class="popup__form" name="form-edit" novalidate>
+              <input
+                type="url"
+                class="popup__input popup__input_type_photo"
+                name="photo-url"
+                id="photo-url-input"
+                placeholder="Ссылка на фото"
+                required
+              />
+              <span class="popup__input-error" id="photo-url-input-error">
+
+              </span>
+              
+              <button
+                type="submit"
+                class="popup__button-save"
+              >
+                Сохранить
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section class="popup popup_type_submit"> 
+        <div class="popup__container">
+          <button class="popup__button-close"></button>
+          <div class="popup__content">
+            <h2 class="popup__title">Вы уверены?</h2>
+            <form class="popup__form" name="form-submit" novalidate>             
+              <button
+                type="submit"
+                class="popup__button-save"
+              >
+                Да
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+
 
       <template class="card-template">
         <li class="card">
