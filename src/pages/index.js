@@ -72,27 +72,27 @@ popupCardAddClass.setEventListeners();
 
 const userInfo = new UserInfo({
   nameSelector: ".profile__name",
-  professionSelector: ".profile__profession",
+  professionSelector: ".profile__profession",  
 });
 
 const popupProfileEditForm = new PopupWithForm({
   popupSelector: ".popup_type_profile-edit",
   handleFormSubmit: (data) => {
-    userInfo.setUserInfo(data);    
-  },
+    api.setNewUserInfo(data)
+    .finally(() => userInfo.setUserInfo(data));     
+  }
 });
 popupProfileEditForm.setEventListeners();
 
 const popupPhotoEdit = new PopupWithForm({
   popupSelector: ".popup_type_photo-edit",
 
-
-  //переделать сабмит!
-
-
-  handleFormSubmit: () => { 
-    
-  },
+  handleFormSubmit: (data) => { 
+    api.setNewPhrofilePhoto(data["photo-url"])
+    .finally(() => {      
+      profilePhoto.src = data["photo-url"];
+    });    
+  }
 });
 popupPhotoEdit.setEventListeners();
 
@@ -111,7 +111,7 @@ popupProfileEditOpenButtonElement.addEventListener("click", () => {
 });
 
 popupPhotoEditOpenHoverElement.addEventListener("click", () => {
-  //photoEditValidator.resetValidation();
+  photoEditValidator.resetValidation();
   popupPhotoEdit.open();
 })
 
@@ -129,6 +129,7 @@ const api = new Api({
 
 api.getInitialCards()
   .then((result) => {
+    console.log(result);
     renderInitialCards(result);
   })
   .catch((err) => {
@@ -138,3 +139,17 @@ api.getInitialCards()
   const renderInitialCards = (items) => {
     //console.log(JSON.stringify(items));
   }
+
+
+// Загрузка данных пользователя
+const profilePhoto = document.querySelector('.profile__photo'); // убрать в constants?
+
+  api.getUserInfo()
+    .then((res) => {
+      userInfo.setUserInfo({name: res.name, profession: res.about});
+      profilePhoto.src = res.avatar;      
+    });
+
+  //api.setNewUserInfo();
+    
+    
