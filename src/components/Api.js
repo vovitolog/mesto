@@ -5,7 +5,7 @@ export class Api {
   }
 
   getInitialCards() {
-    return fetch("https://mesto.nomoreparties.co/v1/cohort-40/cards", {
+    return fetch(`${this._baseUrl}/cards`, {
       headers: this._headers,
     }).then((res) => {
       if (res.ok) {
@@ -24,31 +24,43 @@ export class Api {
     });
   }
 
-  setNewUserInfo(data){
-
+  setNewUserInfo(data) {
     return fetch(`${this._baseUrl}/users/me`, {
       method: "PATCH",
       headers: this._headers,
       body: JSON.stringify({
         name: data.name,
-        about: data.profession
-      })
+        about: data.profession,
+      }),
     }).then((res) => {
       if (res.ok) {
         return res.json();
       }
     });
-  } 
-
-  
+  }
 
   setNewPhrofilePhoto(newPhotoUrl) {
     return fetch(`${this._baseUrl}/users/me/avatar`, {
       method: "PATCH",
       headers: this._headers,
       body: JSON.stringify({
-        avatar: newPhotoUrl
-      })
+        avatar: newPhotoUrl,
+      }),
+    }).then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+    });
+  }
+
+  addNewCard(data) {
+    return fetch(`${this._baseUrl}/cards`, {
+      method: "POST",
+      headers: this._headers,
+      body: JSON.stringify({
+        name: data.name,
+        link: data.link,
+      }),
     }).then((res) => {
       if (res.ok) {
         return res.json();
@@ -56,4 +68,3 @@ export class Api {
     });
   }
 }
-

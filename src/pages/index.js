@@ -18,7 +18,7 @@ import { Section } from "../components/Section.js";
 import { PopupWithImage } from "../components/PopupWithImage.js";
 import { PopupWithForm } from "../components/PopupWithForm.js";
 import { UserInfo } from "../components/UserInfo.js";
-import { Api} from "../components/Api.js";
+import { Api } from "../components/Api.js";
 
 const profileEditValidator = new FormValidator(
   validationSettings,
@@ -45,18 +45,15 @@ const createCard = (data) => {
   const card = new Card(data, ".card-template", (name, link) => {
     popupImage.open(name, link);
   });
-  return card.renderCard();  
+  return card.renderCard();
 };
 
-const myList = new Section(      
-     (data) => {
-      const item = createCard(data);      
-      myList.addItem(item);
-    },
-  ".cards__list"
-);
+const myList = new Section((data) => {
+  const item = createCard(data);
+  myList.addItem(item);
+}, ".cards__list");
 
-myList.renderInitialItems(initialCards);
+// myList.renderInitialItems(initialCards);
 
 const popupCardAddClass = new PopupWithForm({
   popupSelector: ".popup_type_card-add",
@@ -64,39 +61,38 @@ const popupCardAddClass = new PopupWithForm({
     const cardItem = {};
     cardItem.name = data["place-name"];
     cardItem.link = data["image-url"];
-    const item = createCard(cardItem);    
-    myList.addItem(item, "begin");
+    const item = createCard(cardItem);
+    myList.addItem(item, "begin"); // или сделать вместо добавления на страницу генерацию заново?
+    console.log(cardItem);    
+    api.addNewCard(cardItem); // finally???    
   },
 });
 popupCardAddClass.setEventListeners();
 
 const userInfo = new UserInfo({
   nameSelector: ".profile__name",
-  professionSelector: ".profile__profession",  
+  professionSelector: ".profile__profession",
 });
 
 const popupProfileEditForm = new PopupWithForm({
   popupSelector: ".popup_type_profile-edit",
   handleFormSubmit: (data) => {
-    api.setNewUserInfo(data)
-    .finally(() => userInfo.setUserInfo(data));     
-  }
+    api.setNewUserInfo(data).finally(() => userInfo.setUserInfo(data));
+  },
 });
 popupProfileEditForm.setEventListeners();
 
 const popupPhotoEdit = new PopupWithForm({
   popupSelector: ".popup_type_photo-edit",
 
-  handleFormSubmit: (data) => { 
-    api.setNewPhrofilePhoto(data["photo-url"])
-    .finally(() => {      
+  handleFormSubmit: (data) => {
+    api.setNewPhrofilePhoto(data["photo-url"]).finally(() => {
       profilePhoto.src = data["photo-url"];
-    });    
-  }
+    });
+  },
 });
 popupPhotoEdit.setEventListeners();
 
-  
 popupCardAddOpenButtonElement.addEventListener("click", () => {
   cardAddValidator.resetValidation();
   popupCardAddClass.open();
@@ -113,7 +109,7 @@ popupProfileEditOpenButtonElement.addEventListener("click", () => {
 popupPhotoEditOpenHoverElement.addEventListener("click", () => {
   photoEditValidator.resetValidation();
   popupPhotoEdit.open();
-})
+});
 
 // Создаём копию класса Api
 
@@ -125,31 +121,29 @@ const api = new Api({
   },
 });
 
+// Загрузка данных пользователя
+const profilePhoto = document.querySelector(".profile__photo"); // убрать в constants?
+
+api.getUserInfo().then((res) => {
+  userInfo.setUserInfo({ name: res.name, profession: res.about });
+  profilePhoto.src = res.avatar;
+});
+
 // Генерация изначальных карточек
 
-api.getInitialCards()
+api
+  .getInitialCards()
   .then((result) => {
     console.log(result);
-    renderInitialCards(result);
+    myList.renderInitialItems(result);
   })
   .catch((err) => {
     console.log(err); // выведем ошибку в консоль - сделать универсальную функцию?
-  }); 
+  });
 
-  const renderInitialCards = (items) => {
-    //console.log(JSON.stringify(items));
-  }
+// Добавление новой карточки
 
-
-// Загрузка данных пользователя
-const profilePhoto = document.querySelector('.profile__photo'); // убрать в constants?
-
-  api.getUserInfo()
-    .then((res) => {
-      userInfo.setUserInfo({name: res.name, profession: res.about});
-      profilePhoto.src = res.avatar;      
-    });
-
-  //api.setNewUserInfo();
-    
-    
+//api.addNewCard({
+//  name: "name",
+ // link: "https://avatarko.ru/img/kartinka/33/multfilm_lyagushka_32117.jpg",
+// });
