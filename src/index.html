@@ -2,13 +2,17 @@
 <html lang="ru">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mesto Russia</title>
   </head>
   <body class="container">
     <div class="page">
       <header class="header">
-        <img class="header__logo" alt="Место" src="<%=require('./images/logo.svg')%>" />
+        <img
+          class="header__logo"
+          alt="Место"
+          src="<%=require('./images/logo.svg')%>"
+        />
       </header>
       <main class="content">
         <section class="profile">
@@ -36,8 +40,7 @@
           <button class="profile__button-add"></button>
         </section>
         <section class="cards">
-          <ul class="cards__list">
-          </ul>
+          <ul class="cards__list"></ul>
         </section>
       </main>
       <footer class="footer">
@@ -60,9 +63,7 @@
                 placeholder="Имя"
                 required
               />
-              <span class="popup__input-error" id="name-input-error">
-
-              </span>
+              <span class="popup__input-error" id="name-input-error"> </span>
               <input
                 minlength="2"
                 maxlength="200"
@@ -74,12 +75,8 @@
                 required
               />
               <span class="popup__input-error" id="profession-input-error">
-
               </span>
-              <button
-                type="submit"
-                class="popup__button-save"
-              >
+              <button type="submit" class="popup__button-save">
                 Сохранить
               </button>
             </form>
@@ -104,7 +101,6 @@
                 required
               />
               <span class="popup__input-error" id="place-name-input-error">
-
               </span>
               <input
                 type="url"
@@ -115,12 +111,8 @@
                 required
               />
               <span class="popup__input-error" id="image-url-input-error">
-
               </span>
-              <button
-                type="submit"
-                class="popup__button-save"
-              >
+              <button type="submit" class="popup__button-save">
                 Сохранить
               </button>
             </form>
@@ -131,12 +123,12 @@
       <section class="popup popup_type_image-view">
         <div class="popup__wrapper">
           <button class="popup__button-close"></button>
-          <img class="popup__image" alt="" src="#">
+          <img class="popup__image" alt="" src="#" />
           <p class="popup__description"></p>
         </div>
       </section>
 
-      <section class="popup popup_type_photo-edit"> 
+      <section class="popup popup_type_photo-edit">
         <div class="popup__container">
           <button class="popup__button-close"></button>
           <div class="popup__content">
@@ -151,13 +143,9 @@
                 required
               />
               <span class="popup__input-error" id="photo-url-input-error">
-
               </span>
-              
-              <button
-                type="submit"
-                class="popup__button-save"
-              >
+
+              <button type="submit" class="popup__button-save">
                 Сохранить
               </button>
             </form>
@@ -165,35 +153,31 @@
         </div>
       </section>
 
-      <section class="popup popup_type_submit"> 
+      <section class="popup popup_type_submit">
         <div class="popup__container">
           <button class="popup__button-close"></button>
           <div class="popup__content">
             <h2 class="popup__title">Вы уверены?</h2>
-            <form class="popup__form" name="form-submit" novalidate>             
-              <button
-                type="submit"
-                class="popup__button-save"
-              >
-                Да
-              </button>
+            <form class="popup__form" name="form-submit" novalidate>
+              <button type="submit" class="popup__button-save">Да</button>
             </form>
           </div>
         </div>
       </section>
 
-
-
       <template class="card-template">
         <li class="card">
-          <img class="card__image" alt="" src="#"/>
+          <img class="card__image" alt="" src="#" />
           <button class="card__button-delete"></button>
           <div class="card__description">
-            <h2 class="card__title "></h2>
-            <button class="card__like "></button>
+            <h2 class="card__title"></h2>
+            <div class="card__like-wrapper">
+              <button class="card__like"></button>
+              <p class="card__likes-count">0</p>
+            </div>
           </div>
         </li>
       </template>
-    </div>   
+    </div>
   </body>
 </html>
