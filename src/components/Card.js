@@ -3,7 +3,8 @@ export class Card {
     this._cardTemplate = document.querySelector(cardTemplateSelector).content;
     this._name = data.name;
     this._link = data.link;
-    this._handleCardClick = handleCardClick;
+    this._likesCount = data.likes.length; // засунуть в data?
+    this._handleCardClick = handleCardClick;    
   }
 
   _toggleLikeButton = () => {
@@ -26,12 +27,16 @@ export class Card {
   }
 
   renderCard() {
+    console.log(this._name);
+
     this._cardItem = this._cardTemplate.querySelector(".card").cloneNode(true);
     this._likeButton = this._cardItem.querySelector(".card__like");
     this._cardImage = this._cardItem.querySelector(".card__image");
+    this._likesNumber = this._cardItem.querySelector(".card__likes-count");
 
     this._cardImage.src = this._link;
     this._cardImage.alt = this._name;
+    this._likesNumber.textContent = this._likesCount;
     this._cardItem.querySelector(".card__title").textContent = this._name;
 
     this._setEventListeners();

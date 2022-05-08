@@ -1,7 +1,6 @@
 import "./../pages/index.css";
 
 import {
-  initialCards,
   validationSettings,
   popupCardAddOpenButtonElement,
   popupProfileEditOpenButtonElement,
@@ -45,6 +44,7 @@ const createCard = (data) => {
   const card = new Card(data, ".card-template", (name, link) => {
     popupImage.open(name, link);
   });
+  console.log(card);
   return card.renderCard();
 };
 
@@ -53,14 +53,13 @@ const myList = new Section((data) => {
   myList.addItem(item);
 }, ".cards__list");
 
-// myList.renderInitialItems(initialCards);
-
 const popupCardAddClass = new PopupWithForm({
   popupSelector: ".popup_type_card-add",
   handleFormSubmit: (data) => {
     const cardItem = {};
     cardItem.name = data["place-name"];
     cardItem.link = data["image-url"];
+    cardItem.likes = []; // добавили лайки!!!!
     const item = createCard(cardItem);
     myList.addItem(item, "begin"); // или сделать вместо добавления на страницу генерацию заново?
     console.log(cardItem);    
@@ -147,3 +146,8 @@ api
 //  name: "name",
  // link: "https://avatarko.ru/img/kartinka/33/multfilm_lyagushka_32117.jpg",
 // });
+
+/* const like = document.querySelector(".card__likes-count");
+console.log(like.textContent); */
+
+// myList.renderInitialItems(initialCards);
