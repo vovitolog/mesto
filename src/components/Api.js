@@ -24,6 +24,10 @@ export class Api {
     });
   }
 
+  renderFirstScreen() {
+    return Promise.all([this.getInitialCards(), this.getUserInfo()]);
+  }
+
   setNewUserInfo(data) {
     return fetch(`${this._baseUrl}/users/me`, {
       method: "PATCH",

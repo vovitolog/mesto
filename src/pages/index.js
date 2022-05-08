@@ -44,7 +44,6 @@ const createCard = (data) => {
   const card = new Card(data, ".card-template", (name, link) => {
     popupImage.open(name, link);
   });
-  console.log(card);
   return card.renderCard();
 };
 
@@ -60,9 +59,9 @@ const popupCardAddClass = new PopupWithForm({
     cardItem.name = data["place-name"];
     cardItem.link = data["image-url"];
     cardItem.likes = []; // добавили лайки!!!!
+    //cardItem.owner = "40838fbf1fafe74bc0723709";
     const item = createCard(cardItem);
     myList.addItem(item, "begin"); // или сделать вместо добавления на страницу генерацию заново?
-    console.log(cardItem);    
     api.addNewCard(cardItem); // finally???    
   },
 });
@@ -76,7 +75,7 @@ const userInfo = new UserInfo({
 const popupProfileEditForm = new PopupWithForm({
   popupSelector: ".popup_type_profile-edit",
   handleFormSubmit: (data) => {
-    api.setNewUserInfo(data).finally(() => userInfo.setUserInfo(data));
+    api.setNewUserInfo(data).finally(() => userInfo.setUserInfo(data)); //точно finally???
   },
 });
 popupProfileEditForm.setEventListeners();
@@ -85,7 +84,7 @@ const popupPhotoEdit = new PopupWithForm({
   popupSelector: ".popup_type_photo-edit",
 
   handleFormSubmit: (data) => {
-    api.setNewPhrofilePhoto(data["photo-url"]).finally(() => {
+    api.setNewPhrofilePhoto(data["photo-url"]).finally(() => { //точно finally??
       profilePhoto.src = data["photo-url"];
     });
   },
@@ -120,25 +119,42 @@ const api = new Api({
   },
 });
 
-// Загрузка данных пользователя
 const profilePhoto = document.querySelector(".profile__photo"); // убрать в constants?
+
+api.renderFirstScreen()
+.then((result)=> 
+{
+const [initialCards, userData] = result;
+
+myList.renderInitialItems(initialCards);
+
+userInfo.setUserInfo({ name: userData.name, profession: userData.about });
+  profilePhoto.src = userData.avatar;
+  
+});
+
+// Загрузка данных пользователя
+/* 
 
 api.getUserInfo().then((res) => {
   userInfo.setUserInfo({ name: res.name, profession: res.about });
   profilePhoto.src = res.avatar;
+  //console.log (res);
 });
-
+ */
 // Генерация изначальных карточек
 
-api
+/* api
   .getInitialCards()
   .then((result) => {
-    console.log(result);
+    //console.log(result);
     myList.renderInitialItems(result);
   })
   .catch((err) => {
     console.log(err); // выведем ошибку в консоль - сделать универсальную функцию?
   });
+ */
+
 
 // Добавление новой карточки
 

@@ -3,7 +3,8 @@ export class Card {
     this._cardTemplate = document.querySelector(cardTemplateSelector).content;
     this._name = data.name;
     this._link = data.link;
-    this._likesCount = data.likes.length; // засунуть в data?
+    this._likesCount = data.likes.length;
+    this._ownerId = data.owner; // не забыть про userId!!!!!!!!!!!!!1
     this._handleCardClick = handleCardClick;    
   }
 
@@ -11,7 +12,8 @@ export class Card {
     this._likeButton.classList.toggle("card__like_is-pressed");
   };
 
-  _deleteCard = () => {
+  // Делаем публичнм, чтобы удалять при нажатии на да
+  deleteCard = () => {
     this._cardItem.remove();
     this._cardItem = null;
   };
@@ -27,8 +29,6 @@ export class Card {
   }
 
   renderCard() {
-    console.log(this._name);
-
     this._cardItem = this._cardTemplate.querySelector(".card").cloneNode(true);
     this._likeButton = this._cardItem.querySelector(".card__like");
     this._cardImage = this._cardItem.querySelector(".card__image");
@@ -40,6 +40,8 @@ export class Card {
     this._cardItem.querySelector(".card__title").textContent = this._name;
 
     this._setEventListeners();
+
+    //console.log(this._ownerId);
 
     return this._cardItem;
   }
