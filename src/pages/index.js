@@ -16,6 +16,7 @@ import { Card } from "../components/Card.js";
 import { Section } from "../components/Section.js";
 import { PopupWithImage } from "../components/PopupWithImage.js";
 import { PopupWithForm } from "../components/PopupWithForm.js";
+import { PopupWithSubmit } from "../components/PopupWithSubmit.js";
 import { UserInfo } from "../components/UserInfo.js";
 import { Api } from "../components/Api.js";
 
@@ -40,10 +41,25 @@ photoEditValidator.enableValidation();
 const popupImage = new PopupWithImage(".popup_type_image-view");
 popupImage.setEventListeners();
 
+const popupConfirm = new PopupWithSubmit({
+  popupSelector: ".popup_type_submit",
+  handleFormSubmit: () => {
+    console.log(`Test`);
+  },
+});
+popupConfirm.setEventListeners;
+
 const createCard = (data) => {
-  const card = new Card(data, ".card-template", (name, link) => {
-    popupImage.open(name, link);
-  });
+  const card = new Card(
+    data,
+    currentUser,
+    ".card-template",
+    (name, link) => {
+      popupImage.open(name, link);
+    },
+    () => popupConfirm.open()
+      
+  );
   return card.renderCard();
 };
 
@@ -59,10 +75,11 @@ const popupCardAddClass = new PopupWithForm({
     cardItem.name = data["place-name"];
     cardItem.link = data["image-url"];
     cardItem.likes = []; // добавили лайки!!!!
-    //cardItem.owner = "40838fbf1fafe74bc0723709";
+    cardItem.owner = {};
+    cardItem.owner["_id"] = currentUser;
     const item = createCard(cardItem);
     myList.addItem(item, "begin"); // или сделать вместо добавления на страницу генерацию заново?
-    api.addNewCard(cardItem); // finally???    
+    api.addNewCard(cardItem); // finally???
   },
 });
 popupCardAddClass.setEventListeners();
@@ -84,7 +101,8 @@ const popupPhotoEdit = new PopupWithForm({
   popupSelector: ".popup_type_photo-edit",
 
   handleFormSubmit: (data) => {
-    api.setNewPhrofilePhoto(data["photo-url"]).finally(() => { //точно finally??
+    api.setNewPhrofilePhoto(data["photo-url"]).finally(() => {
+      //точно finally??
       profilePhoto.src = data["photo-url"];
     });
   },
@@ -120,17 +138,21 @@ const api = new Api({
 });
 
 const profilePhoto = document.querySelector(".profile__photo"); // убрать в constants?
+let currentUser = ""; // Взять мой id и записать его в constants?
 
-api.renderFirstScreen()
-.then((result)=> 
-{
-const [initialCards, userData] = result;
+api.renderFirstScreen().then((result) => {
+  const [initialCards, userData] = result;
 
-myList.renderInitialItems(initialCards);
+  initialCards.forEach((element) => {
+    //console.log(element["_id"]);
+  });
+  currentUser = userData["_id"];
+  console.log(currentUser + " Owner");
 
-userInfo.setUserInfo({ name: userData.name, profession: userData.about });
+  myList.renderInitialItems(initialCards);
+
+  userInfo.setUserInfo({ name: userData.name, profession: userData.about });
   profilePhoto.src = userData.avatar;
-  
 });
 
 // Загрузка данных пользователя
@@ -155,12 +177,11 @@ api.getUserInfo().then((res) => {
   });
  */
 
-
 // Добавление новой карточки
 
 //api.addNewCard({
 //  name: "name",
- // link: "https://avatarko.ru/img/kartinka/33/multfilm_lyagushka_32117.jpg",
+// link: "https://avatarko.ru/img/kartinka/33/multfilm_lyagushka_32117.jpg",
 // });
 
 /* const like = document.querySelector(".card__likes-count");
