@@ -44,8 +44,7 @@ popupImage.setEventListeners();
 const popupConfirm = new PopupWithSubmit({
   popupSelector: ".popup_type_submit",
   handleFormSubmit: (card) => {
-    const cardId = card.returnCardId();
-    api.deleteCard(cardId).then(() => {
+      api.deleteCard(card["_cardId"]).then(() => {
       card.deleteCard();
     });
   },
@@ -60,7 +59,15 @@ const createCard = (data) => {
     (name, link) => {
       popupImage.open(name, link);
     },
-    () => popupConfirm.open(card)
+    () => popupConfirm.open(card), // может что-то передать на вход в функцию а НЕ ВСЮ КАРТУ
+    () => {
+      //console.log(data);
+      //console.log(card.isLiked());
+      //console.log(card["_cardId"]);
+      const likeClick =   card.isLiked() ? api.removeLike(card["_cardId"]) : api.addLike(card["_cardId"])
+      //api.addLike(card["_cardId"])
+      likeClick.then(result => console.log(result))
+    }
   );
   return card.renderCard();
 };
@@ -75,20 +82,23 @@ const popupCardAddClass = new PopupWithForm({
   handleFormSubmit: (data) => {
     
     api.addNewCard(data["place-name"], data["image-url"])
-    .then(result => console.log(result))
-
+    .then(card => {
+      const item = createCard(card);
+      myList.addItem(item, "begin");
+      /* console.log(card);
     const cardItem = {};
-    cardItem.name = data["place-name"];
-    cardItem.link = data["image-url"];
-    cardItem.likes = [];
-    cardItem.owner = {};
-    cardItem.owner["_id"] = currentUser;
-    const item = createCard(cardItem);
-    myList.addItem(item, "begin");
+    cardItem.name = card.name;
+    cardItem.link = card.link;
+    cardItem.likes = card.likes;
+    cardItem.owner = card.owner; */
+    //cardItem["_id"] = 
+    //ardItem.owner["_id"] = currentUser;
+    
     //api.addNewCard(cardItem)
     //.then(result => console.log(result))
-    ; // finally???
-  },
+    // finally???
+  })
+  }
 });
 popupCardAddClass.setEventListeners();
 

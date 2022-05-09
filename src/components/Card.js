@@ -4,39 +4,73 @@ export class Card {
     currentUser,
     cardTemplateSelector,
     handleCardClick,
-    handleDeleteCard
+    handleDeleteCard,
+    handleLikeCard
   ) {
     this._cardTemplate = document.querySelector(cardTemplateSelector).content;
     this._name = data.name;
     this._link = data.link;
-    this._likesCount = data.likes.length;
+    this._likesCount = data.likes.length; // нужна ли отдельная переменная????
+    this._likes = data.likes;
     this._ownerId = data.owner["_id"]; // не забыть про userId!!!!!!!!!!!!!1
     this._currentUser = currentUser;
-    this._cardId = data["_id"];
+    this._cardId = data["_id"];    
     this._handleCardClick = handleCardClick;
     this._handleDeleteCard = handleDeleteCard; // переименовать в delete confirm?
+    this._handeLikeClick = handleLikeCard;
+
+    // проверить нет ли лшиних this!!!
   }
 
+
+  //убрать это функцию
   _toggleLikeButton = () => {
     this._likeButton.classList.toggle("card__like_is-pressed");
   };
 
-  returnCardId = () => {
-    return  this._cardId;
-  }
+ /*  returnCardId = () => {
+    return this._cardId;  // МОЖНО ЛИ БЕЗ НЕГ??????
+  }; */
   // Делаем публичнм, чтобы удалять при нажатии на да
   deleteCard = () => {
     this._cardItem.remove();
-    this._cardItem = null; //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+    this._cardItem = null;
   };
 
   _setEventListeners() {
-    this._deleteButton.addEventListener("click", () => this._handleDeleteCard(this._cardId));
-    this._likeButton.addEventListener("click", this._toggleLikeButton);
+    this._deleteButton.addEventListener("click", () =>
+      this._handleDeleteCard()
+    );
+
+
+
+    this._likeButton.addEventListener("click", () => 
+    {
+    this._handeLikeClick();
+    this._toggleLikeButton();
+    } // надо ли передавать???
+    )
+    
+    //this._toggleLikeButton);
+
+
+
     this._cardImage.addEventListener("click", () =>
       this._handleCardClick(this._name, this._link)
     );
   }
+
+  isLiked() {
+    return this._likes.some(like => {
+      return like._id === this._currentUser;      
+    });
+    
+  }
+
+  likePressed() {
+    this.isLiked()
+  }
+
 
   //подумать над названием функции!!!!!!!!!!!
   _isCreatedByCurrentUser() {
@@ -62,7 +96,6 @@ export class Card {
     }
 
     this._setEventListeners();
-    // console.log(this._cardId);
 
     return this._cardItem;
   }
