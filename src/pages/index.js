@@ -43,11 +43,18 @@ popupImage.setEventListeners();
 
 const popupConfirm = new PopupWithSubmit({
   popupSelector: ".popup_type_submit",
-  handleFormSubmit: () => {
-    console.log(`Test`);
+  handleFormSubmit: (card) => {
+        console.log(card);
+        const cardId = card.returnCardId();
+        console.log(cardId);
+        api.deleteCard(cardId)
+        .then(() => {
+          card.deleteCard();
+        })
+
   },
 });
-popupConfirm.setEventListeners;
+popupConfirm.setEventListeners();
 
 const createCard = (data) => {
   const card = new Card(
@@ -57,9 +64,11 @@ const createCard = (data) => {
     (name, link) => {
       popupImage.open(name, link);
     },
-    () => popupConfirm.open()
+    () => popupConfirm.open(card)
       
   );
+  //console.log(data);
+  //console.log(card["_cardId"]);
   return card.renderCard();
 };
 
@@ -143,11 +152,11 @@ let currentUser = ""; // Взять мой id и записать его в cons
 api.renderFirstScreen().then((result) => {
   const [initialCards, userData] = result;
 
-  initialCards.forEach((element) => {
+ /*  initialCards.forEach((element) => {
     //console.log(element["_id"]);
-  });
+  }); */
   currentUser = userData["_id"];
-  console.log(currentUser + " Owner");
+  //console.log(currentUser + " Owner");
 
   myList.renderInitialItems(initialCards);
 

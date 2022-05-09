@@ -21,14 +21,17 @@ export class Card {
     this._likeButton.classList.toggle("card__like_is-pressed");
   };
 
+  returnCardId = () => {
+    return  this._cardId;
+  }
   // Делаем публичнм, чтобы удалять при нажатии на да
-  _deleteCard = () => {
+  deleteCard = () => {
     this._cardItem.remove();
     this._cardItem = null; //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
   };
 
   _setEventListeners() {
-    this._deleteButton.addEventListener("click", this._handleDeleteCard);
+    this._deleteButton.addEventListener("click", () => this._handleDeleteCard(this._cardId));
     this._likeButton.addEventListener("click", this._toggleLikeButton);
     this._cardImage.addEventListener("click", () =>
       this._handleCardClick(this._name, this._link)
