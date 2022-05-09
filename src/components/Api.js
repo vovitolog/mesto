@@ -57,13 +57,13 @@ export class Api {
     });
   }
 
-  addNewCard(data) {
+  addNewCard(name, link) {
     return fetch(`${this._baseUrl}/cards`, {
       method: "POST",
       headers: this._headers,
       body: JSON.stringify({
-        name: data.name,
-        link: data.link,
+        name,
+        link
       }),
     }).then((res) => {
       if (res.ok) {

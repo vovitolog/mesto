@@ -44,14 +44,10 @@ popupImage.setEventListeners();
 const popupConfirm = new PopupWithSubmit({
   popupSelector: ".popup_type_submit",
   handleFormSubmit: (card) => {
-        console.log(card);
-        const cardId = card.returnCardId();
-        console.log(cardId);
-        api.deleteCard(cardId)
-        .then(() => {
-          card.deleteCard();
-        })
-
+    const cardId = card.returnCardId();
+    api.deleteCard(cardId).then(() => {
+      card.deleteCard();
+    });
   },
 });
 popupConfirm.setEventListeners();
@@ -65,10 +61,7 @@ const createCard = (data) => {
       popupImage.open(name, link);
     },
     () => popupConfirm.open(card)
-      
   );
-  //console.log(data);
-  //console.log(card["_cardId"]);
   return card.renderCard();
 };
 
@@ -80,15 +73,21 @@ const myList = new Section((data) => {
 const popupCardAddClass = new PopupWithForm({
   popupSelector: ".popup_type_card-add",
   handleFormSubmit: (data) => {
+    
+    api.addNewCard(data["place-name"], data["image-url"])
+    .then(result => console.log(result))
+
     const cardItem = {};
     cardItem.name = data["place-name"];
     cardItem.link = data["image-url"];
-    cardItem.likes = []; // добавили лайки!!!!
+    cardItem.likes = [];
     cardItem.owner = {};
     cardItem.owner["_id"] = currentUser;
     const item = createCard(cardItem);
-    myList.addItem(item, "begin"); // или сделать вместо добавления на страницу генерацию заново?
-    api.addNewCard(cardItem); // finally???
+    myList.addItem(item, "begin");
+    //api.addNewCard(cardItem)
+    //.then(result => console.log(result))
+    ; // finally???
   },
 });
 popupCardAddClass.setEventListeners();
@@ -152,7 +151,7 @@ let currentUser = ""; // Взять мой id и записать его в cons
 api.renderFirstScreen().then((result) => {
   const [initialCards, userData] = result;
 
- /*  initialCards.forEach((element) => {
+  /*  initialCards.forEach((element) => {
     //console.log(element["_id"]);
   }); */
   currentUser = userData["_id"];
