@@ -61,12 +61,33 @@ const createCard = (data) => {
     },
     () => popupConfirm.open(card), // может что-то передать на вход в функцию а НЕ ВСЮ КАРТУ
     () => {
-      //console.log(data);
-      //console.log(card.isLiked());
-      //console.log(card["_cardId"]);
-      const likeClick =   card.isLiked() ? api.removeLike(card["_cardId"]) : api.addLike(card["_cardId"])
-      //api.addLike(card["_cardId"])
-      likeClick.then(result => console.log(result))
+      
+      //const likeClick =  card.isLiked();
+      //console.log (likeClick); // убрать в промис сразу???
+
+      if (card.isLiked()) {
+        api.removeLike(card["_cardId"]).then (data => {
+          console.log(data);
+          card.sendLikes(data.likes);          
+          card.renderLike();
+      })
+      } else {
+        api.addLike(card["_cardId"]).then (data => {
+          console.log(data);
+          card.sendLikes(data.likes);          
+          card.renderLike();
+      })
+      }
+
+
+  /*     const likePromise = likeClick ? api.removeLike(card["_cardId"]) : api.addLike(card["_cardId"]);
+      console.log(likePromise);
+      likePromise.then(data => {
+          card.sendLikes(data.likes);
+          console.log(data.likes);
+          card.renderLike();
+      }) */
+        
     }
   );
   return card.renderCard();
