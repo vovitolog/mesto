@@ -10,6 +10,8 @@ import {
   popupFormPhotoEdit,
   popupNameInputValue,
   popupProfessionInputValue,
+  profilePhoto,
+  currentUser,
 } from "../utils/constants.js";
 import { FormValidator } from "../components/FormValidator.js";
 import { Card } from "../components/Card.js";
@@ -38,6 +40,37 @@ profileEditValidator.enableValidation();
 cardAddValidator.enableValidation();
 photoEditValidator.enableValidation();
 
+const createCard = (data) => {
+  const card = new Card({
+    data,
+    currentUser,
+    cardTemplateSelector: ".card-template",
+    handleCardClick: (name, link) => {
+      popupImage.open(name, link);
+    },
+    handleDeleteCard: () => popupConfirm.open(card),
+    handleLikeCard: () => {
+      if (card.isLiked()) {
+        api.removeLike(card["_cardId"]).then((data) => {
+          card.sendLikes(data.likes);
+          card.renderLike();
+        });
+      } else {
+        api.addLike(card["_cardId"]).then((data) => {
+          card.sendLikes(data.likes);
+          card.renderLike();
+        });
+      }
+    },
+  });
+  return card.renderCard();
+};
+
+const myList = new Section((data) => {
+  const item = createCard(data);
+  myList.addItem(item);
+}, ".cards__list");
+
 const popupImage = new PopupWithImage(".popup_type_image-view");
 popupImage.setEventListeners();
 
@@ -50,39 +83,6 @@ const popupConfirm = new PopupWithSubmit({
   },
 });
 popupConfirm.setEventListeners();
-
-const createCard = (data) => {
-  const card = new Card(
-    data,
-    currentUser,
-    ".card-template",
-    (name, link) => {
-      popupImage.open(name, link);
-    },
-    () => popupConfirm.open(card), // может что-то передать на вход в функцию а НЕ ВСЮ КАРТУ
-    () => {
-      if (card.isLiked()) {
-        api.removeLike(card["_cardId"]).then((data) => {
-          console.log(data);
-          card.sendLikes(data.likes);
-          card.renderLike();
-        });
-      } else {
-        api.addLike(card["_cardId"]).then((data) => {
-          console.log(data);
-          card.sendLikes(data.likes);
-          card.renderLike();
-        });
-      }
-    }
-  );
-  return card.renderCard();
-};
-
-const myList = new Section((data) => {
-  const item = createCard(data);
-  myList.addItem(item);
-}, ".cards__list");
 
 const popupCardAddClass = new PopupWithForm({
   popupSelector: ".popup_type_card-add",
@@ -105,7 +105,7 @@ const popupProfileEditForm = new PopupWithForm({
   popupSelector: ".popup_type_profile-edit",
   handleFormSubmit: (data) => {
     popupProfileEditForm.setWaitingText();
-    api.setNewUserInfo(data).finally(() => userInfo.setUserInfo(data)); //точно finally???
+    api.setNewUserInfo(data).then(() => userInfo.setUserInfo(data));
   },
 });
 popupProfileEditForm.setEventListeners();
@@ -114,17 +114,9 @@ const popupPhotoEdit = new PopupWithForm({
   popupSelector: ".popup_type_photo-edit",
 
   handleFormSubmit: (data) => {
-    
     popupPhotoEdit.setWaitingText();
     profilePhoto.src = data["photo-url"];
-    
-    api.setNewPhrofilePhoto(data["photo-url"]).then(() => {     
-      //popupPhotoEdit.resetWaitingText();     
-    })
-    .finally(() => {
-      
-    })
-   
+    api.setNewProfilePhoto(data["photo-url"]);
   },
 });
 popupPhotoEdit.setEventListeners();
@@ -150,8 +142,6 @@ popupPhotoEditOpenHoverElement.addEventListener("click", () => {
   popupPhotoEdit.open();
 });
 
-// Создаём копию класса Api
-
 const api = new Api({
   baseUrl: "https://mesto.nomoreparties.co/v1/cohort-40",
   headers: {
@@ -160,54 +150,9 @@ const api = new Api({
   },
 });
 
-const profilePhoto = document.querySelector(".profile__photo"); // убрать в constants?
-let currentUser = ""; // Взять мой id и записать его в constants?
-
 api.renderFirstScreen().then((result) => {
   const [initialCards, userData] = result;
-
-  /*  initialCards.forEach((element) => {
-    //console.log(element["_id"]);
-  }); */
-  currentUser = userData["_id"];
-  //console.log(currentUser + " Owner");
-
   myList.renderInitialItems(initialCards);
-
   userInfo.setUserInfo({ name: userData.name, profession: userData.about });
   profilePhoto.src = userData.avatar;
 });
-
-// Загрузка данных пользователя
-/* 
-
-api.getUserInfo().then((res) => {
-  userInfo.setUserInfo({ name: res.name, profession: res.about });
-  profilePhoto.src = res.avatar;
-  //console.log (res);
-});
- */
-// Генерация изначальных карточек
-
-/* api
-  .getInitialCards()
-  .then((result) => {
-    //console.log(result);
-    myList.renderInitialItems(result);
-  })
-  .catch((err) => {
-    console.log(err); // выведем ошибку в консоль - сделать универсальную функцию?
-  });
- */
-
-// Добавление новой карточки
-
-//api.addNewCard({
-//  name: "name",
-// link: "https://avatarko.ru/img/kartinka/33/multfilm_lyagushka_32117.jpg",
-// });
-
-/* const like = document.querySelector(".card__likes-count");
-console.log(like.textContent); */
-
-// myList.renderInitialItems(initialCards);

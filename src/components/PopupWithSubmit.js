@@ -5,7 +5,9 @@ export class PopupWithSubmit extends Popup {
     super(popupSelector);
     this._handleFormSubmit = handleFormSubmit;
     this._popupForm = this._popupName.querySelector(".popup__form");
-    this._popupSubmitButton = this._popupName.querySelector(".popup__button-save");
+    this._popupSubmitButton = this._popupName.querySelector(
+      ".popup__button-save"
+    );
   }
 
   setEventListeners() {
@@ -13,8 +15,7 @@ export class PopupWithSubmit extends Popup {
     this._popupForm.addEventListener("submit", (event) => {
       event.preventDefault();
       this._handleFormSubmit(this._cardId);
-      //console.log(this._popupSubmitButton.textContent);
-      this._popupSubmitButton.textContent
+      this._popupSubmitButton.textContent;
       this.close();
     });
   }

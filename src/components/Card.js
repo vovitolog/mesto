@@ -1,23 +1,22 @@
 export class Card {
-  constructor(
+  constructor({
     data,
     currentUser,
     cardTemplateSelector,
     handleCardClick,
     handleDeleteCard,
-    handleLikeCard
-  ) {
+    handleLikeCard,
+  }) {
     this._cardTemplate = document.querySelector(cardTemplateSelector).content;
     this._name = data.name;
     this._link = data.link;
     this._likes = data.likes;
-    this._ownerId = data.owner["_id"]; // не забыть про userId!!!!!!!!!!!!!1
+    this._ownerId = data.owner["_id"];
     this._currentUser = currentUser;
     this._cardId = data["_id"];
     this._handleCardClick = handleCardClick;
-    this._handleDeleteCard = handleDeleteCard; // переименовать в delete confirm?
+    this._handleDeleteCard = handleDeleteCard;
     this._handeLikeClick = handleLikeCard;
-    // проверить нет ли лшиних this!!!
   }
 
   displayLike() {
@@ -30,12 +29,11 @@ export class Card {
 
   renderLike() {
     this._likesNumber.textContent = this._likes.length;
-    this.displayLike(); // передать this._currentUser???
+    this.displayLike();
   }
 
   sendLikes(likesToSend) {
     this._likes = likesToSend;
-    console.log(this._likes);
   }
 
   deleteCard = () => {
@@ -60,7 +58,6 @@ export class Card {
     });
   }
 
-  //подумать над названием функции!!!!!!!!!!!
   _isCreatedByCurrentUser() {
     return this._ownerId === this._currentUser;
   }
@@ -77,7 +74,6 @@ export class Card {
 
     if (!this._isCreatedByCurrentUser()) {
       this._deleteButton.remove();
-      //this._deleteButton = null; как удалить или вообще не вешать туда листенеры!!!
     }
     this.renderLike();
     this._setEventListeners();
