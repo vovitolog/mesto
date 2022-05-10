@@ -44,7 +44,7 @@ popupImage.setEventListeners();
 const popupConfirm = new PopupWithSubmit({
   popupSelector: ".popup_type_submit",
   handleFormSubmit: (card) => {
-      api.deleteCard(card["_cardId"]).then(() => {
+    api.deleteCard(card["_cardId"]).then(() => {
       card.deleteCard();
     });
   },
@@ -61,33 +61,19 @@ const createCard = (data) => {
     },
     () => popupConfirm.open(card), // может что-то передать на вход в функцию а НЕ ВСЮ КАРТУ
     () => {
-      
-      //const likeClick =  card.isLiked();
-      //console.log (likeClick); // убрать в промис сразу???
-
       if (card.isLiked()) {
-        api.removeLike(card["_cardId"]).then (data => {
+        api.removeLike(card["_cardId"]).then((data) => {
           console.log(data);
-          card.sendLikes(data.likes);          
-          card.renderLike();
-      })
-      } else {
-        api.addLike(card["_cardId"]).then (data => {
-          console.log(data);
-          card.sendLikes(data.likes);          
-          card.renderLike();
-      })
-      }
-
-
-  /*     const likePromise = likeClick ? api.removeLike(card["_cardId"]) : api.addLike(card["_cardId"]);
-      console.log(likePromise);
-      likePromise.then(data => {
           card.sendLikes(data.likes);
-          console.log(data.likes);
           card.renderLike();
-      }) */
-        
+        });
+      } else {
+        api.addLike(card["_cardId"]).then((data) => {
+          console.log(data);
+          card.sendLikes(data.likes);
+          card.renderLike();
+        });
+      }
     }
   );
   return card.renderCard();
@@ -101,25 +87,12 @@ const myList = new Section((data) => {
 const popupCardAddClass = new PopupWithForm({
   popupSelector: ".popup_type_card-add",
   handleFormSubmit: (data) => {
-    
-    api.addNewCard(data["place-name"], data["image-url"])
-    .then(card => {
+    popupCardAddClass.setWaitingText();
+    api.addNewCard(data["place-name"], data["image-url"]).then((card) => {
       const item = createCard(card);
       myList.addItem(item, "begin");
-      /* console.log(card);
-    const cardItem = {};
-    cardItem.name = card.name;
-    cardItem.link = card.link;
-    cardItem.likes = card.likes;
-    cardItem.owner = card.owner; */
-    //cardItem["_id"] = 
-    //ardItem.owner["_id"] = currentUser;
-    
-    //api.addNewCard(cardItem)
-    //.then(result => console.log(result))
-    // finally???
-  })
-  }
+    });
+  },
 });
 popupCardAddClass.setEventListeners();
 
@@ -131,6 +104,7 @@ const userInfo = new UserInfo({
 const popupProfileEditForm = new PopupWithForm({
   popupSelector: ".popup_type_profile-edit",
   handleFormSubmit: (data) => {
+    popupProfileEditForm.setWaitingText();
     api.setNewUserInfo(data).finally(() => userInfo.setUserInfo(data)); //точно finally???
   },
 });
@@ -140,16 +114,24 @@ const popupPhotoEdit = new PopupWithForm({
   popupSelector: ".popup_type_photo-edit",
 
   handleFormSubmit: (data) => {
-    api.setNewPhrofilePhoto(data["photo-url"]).finally(() => {
-      //точно finally??
-      profilePhoto.src = data["photo-url"];
-    });
+    
+    popupPhotoEdit.setWaitingText();
+    profilePhoto.src = data["photo-url"];
+    
+    api.setNewPhrofilePhoto(data["photo-url"]).then(() => {     
+      //popupPhotoEdit.resetWaitingText();     
+    })
+    .finally(() => {
+      
+    })
+   
   },
 });
 popupPhotoEdit.setEventListeners();
 
 popupCardAddOpenButtonElement.addEventListener("click", () => {
   cardAddValidator.resetValidation();
+  popupCardAddClass.resetWaitingText();
   popupCardAddClass.open();
 });
 
@@ -158,11 +140,13 @@ popupProfileEditOpenButtonElement.addEventListener("click", () => {
   popupNameInputValue.value = userInfoOnOpen.name;
   popupProfessionInputValue.value = userInfoOnOpen.profession;
   profileEditValidator.resetValidation();
+  popupProfileEditForm.resetWaitingText();
   popupProfileEditForm.open();
 });
 
 popupPhotoEditOpenHoverElement.addEventListener("click", () => {
   photoEditValidator.resetValidation();
+  popupPhotoEdit.resetWaitingText();
   popupPhotoEdit.open();
 });
 
