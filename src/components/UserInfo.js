@@ -1,7 +1,8 @@
 export class UserInfo {
-  constructor({ nameSelector, professionSelector }) {
+  constructor({ nameSelector, professionSelector, photoSelector }) {
     this._profileNameValue = document.querySelector(nameSelector);
     this._profileProfessionValue = document.querySelector(professionSelector);
+    this._profilePhotoValue = document.querySelector(photoSelector);
   }
 
   getUserInfo() {
@@ -14,5 +15,9 @@ export class UserInfo {
   setUserInfo({ name, profession }) {
     this._profileNameValue.textContent = name;
     this._profileProfessionValue.textContent = profession;
+  }
+
+  setUserPhoto(data) {
+    this._profilePhotoValue.src = data;
   }
 }

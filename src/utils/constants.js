@@ -31,9 +31,6 @@ export const popupFormPhotoEdit = document
   .querySelector(".popup_type_photo-edit")
   .querySelector(".popup__form");
 
-export const profilePhoto = document.querySelector(".profile__photo");
-export const currentUser = "40838fbf1fafe74bc0723709";
-
 export const popupNameInputValue = popupFormProfileEdit.querySelector(
   ".popup__input_type_name"
 );

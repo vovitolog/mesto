@@ -10,8 +10,6 @@ import {
   popupFormPhotoEdit,
   popupNameInputValue,
   popupProfessionInputValue,
-  profilePhoto,
-  currentUser,
 } from "../utils/constants.js";
 import { FormValidator } from "../components/FormValidator.js";
 import { Card } from "../components/Card.js";
@@ -39,6 +37,27 @@ const photoEditValidator = new FormValidator(
 profileEditValidator.enableValidation();
 cardAddValidator.enableValidation();
 photoEditValidator.enableValidation();
+
+let currentUser = null;
+
+const api = new Api({
+  baseUrl: "https://mesto.nomoreparties.co/v1/cohort-40",
+  headers: {
+    authorization: " f67242ed-0af1-4508-b1a9-28f5e424436c",
+    "Content-Type": "application/json",
+  },
+});
+
+api
+  .renderFirstScreen()
+  .then((result) => {
+    const [initialCards, userData] = result;
+    currentUser = userData["_id"];
+    myList.renderInitialItems(initialCards);
+    userInfo.setUserInfo({ name: userData.name, profession: userData.about });
+    userInfo.setUserPhoto(userData.avatar);
+  })
+  .catch((error) => console.log(`Ошибка.....: ${error}`));
 
 const createCard = (data) => {
   const card = new Card({
@@ -99,6 +118,7 @@ popupCardAddClass.setEventListeners();
 const userInfo = new UserInfo({
   nameSelector: ".profile__name",
   professionSelector: ".profile__profession",
+  photoSelector: ".profile__photo",
 });
 
 const popupProfileEditForm = new PopupWithForm({
@@ -115,7 +135,7 @@ const popupPhotoEdit = new PopupWithForm({
 
   handleFormSubmit: (data) => {
     popupPhotoEdit.setWaitingText();
-    profilePhoto.src = data["photo-url"];
+    userInfo.setUserPhoto(data["photo-url"]); //fianlly???
     api.setNewProfilePhoto(data["photo-url"]);
   },
 });
@@ -140,19 +160,4 @@ popupPhotoEditOpenHoverElement.addEventListener("click", () => {
   photoEditValidator.resetValidation();
   popupPhotoEdit.resetWaitingText();
   popupPhotoEdit.open();
-});
-
-const api = new Api({
-  baseUrl: "https://mesto.nomoreparties.co/v1/cohort-40",
-  headers: {
-    authorization: " f67242ed-0af1-4508-b1a9-28f5e424436c",
-    "Content-Type": "application/json",
-  },
-});
-
-api.renderFirstScreen().then((result) => {
-  const [initialCards, userData] = result;
-  myList.renderInitialItems(initialCards);
-  userInfo.setUserInfo({ name: userData.name, profession: userData.about });
-  profilePhoto.src = userData.avatar;
 });
