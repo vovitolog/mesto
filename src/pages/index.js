@@ -70,15 +70,21 @@ const createCard = (data) => {
     handleDeleteCard: () => popupConfirm.open(card),
     handleLikeCard: () => {
       if (card.isLiked()) {
-        api.removeLike(card["_cardId"]).then((data) => {
-          card.sendLikes(data.likes);
-          card.renderLike();
-        });
+        api
+          .removeLike(card["_cardId"])
+          .then((data) => {
+            card.sendLikes(data.likes);
+            card.renderLike();
+          })
+          .catch((error) => console.log(`Ошибка.....: ${error}`));
       } else {
-        api.addLike(card["_cardId"]).then((data) => {
-          card.sendLikes(data.likes);
-          card.renderLike();
-        });
+        api
+          .addLike(card["_cardId"])
+          .then((data) => {
+            card.sendLikes(data.likes);
+            card.renderLike();
+          })
+          .catch((error) => console.log(`Ошибка.....: ${error}`));
       }
     },
   });
@@ -96,9 +102,13 @@ popupImage.setEventListeners();
 const popupConfirm = new PopupWithSubmit({
   popupSelector: ".popup_type_submit",
   handleFormSubmit: (card) => {
-    api.deleteCard(card["_cardId"]).then(() => {
-      card.deleteCard();
-    });
+    api
+      .deleteCard(card["_cardId"])
+      .then(() => {
+        card.deleteCard();
+      })
+      .catch((error) => console.log(`Ошибка.....: ${error}`))
+      .finally(() => popupConfirm.close());
   },
 });
 popupConfirm.setEventListeners();
@@ -107,10 +117,14 @@ const popupCardAddClass = new PopupWithForm({
   popupSelector: ".popup_type_card-add",
   handleFormSubmit: (data) => {
     popupCardAddClass.setWaitingText();
-    api.addNewCard(data["place-name"], data["image-url"]).then((card) => {
-      const item = createCard(card);
-      myList.addItem(item, "begin");
-    });
+    api
+      .addNewCard(data["place-name"], data["image-url"])
+      .then((card) => {
+        const item = createCard(card);
+        myList.addItem(item, "begin");
+      })
+      .catch((error) => console.log(`Ошибка.....: ${error}`))
+      .finally(() => popupCardAddClass.close());
   },
 });
 popupCardAddClass.setEventListeners();
@@ -123,9 +137,14 @@ const userInfo = new UserInfo({
 
 const popupProfileEditForm = new PopupWithForm({
   popupSelector: ".popup_type_profile-edit",
+
   handleFormSubmit: (data) => {
     popupProfileEditForm.setWaitingText();
-    api.setNewUserInfo(data).then(() => userInfo.setUserInfo(data));
+    api
+      .setNewUserInfo(data)
+      .then(() => userInfo.setUserInfo(data))
+      .catch((error) => console.log(`Ошибка.....: ${error}`))
+      .finally(() => popupProfileEditForm.close());
   },
 });
 popupProfileEditForm.setEventListeners();
@@ -135,8 +154,11 @@ const popupPhotoEdit = new PopupWithForm({
 
   handleFormSubmit: (data) => {
     popupPhotoEdit.setWaitingText();
-    userInfo.setUserPhoto(data["photo-url"]); //fianlly???
-    api.setNewProfilePhoto(data["photo-url"]);
+    api
+      .setNewProfilePhoto(data["photo-url"])
+      .then(() => userInfo.setUserPhoto(data["photo-url"]))
+      .catch((error) => console.log(`Ошибка.....: ${error}`))
+      .finally(() => popupPhotoEdit.close());
   },
 });
 popupPhotoEdit.setEventListeners();
