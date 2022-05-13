@@ -106,9 +106,9 @@ const popupConfirm = new PopupWithSubmit({
       .deleteCard(card["_cardId"])
       .then(() => {
         card.deleteCard();
+        popupConfirm.close();
       })
-      .catch((error) => console.log(`Ошибка.....: ${error}`))
-      .finally(() => popupConfirm.close());
+      .catch((error) => console.log(`Ошибка.....: ${error}`));
   },
 });
 popupConfirm.setEventListeners();
@@ -122,9 +122,9 @@ const popupCardAddClass = new PopupWithForm({
       .then((card) => {
         const item = createCard(card);
         myList.addItem(item, "begin");
+        popupCardAddClass.close();
       })
-      .catch((error) => console.log(`Ошибка.....: ${error}`))
-      .finally(() => popupCardAddClass.close());
+      .catch((error) => console.log(`Ошибка.....: ${error}`));
   },
 });
 popupCardAddClass.setEventListeners();
@@ -142,9 +142,11 @@ const popupProfileEditForm = new PopupWithForm({
     popupProfileEditForm.setWaitingText();
     api
       .setNewUserInfo(data)
-      .then(() => userInfo.setUserInfo(data))
-      .catch((error) => console.log(`Ошибка.....: ${error}`))
-      .finally(() => popupProfileEditForm.close());
+      .then(() => {
+        userInfo.setUserInfo(data);
+        popupProfileEditForm.close();
+      })
+      .catch((error) => console.log(`Ошибка.....: ${error}`));
   },
 });
 popupProfileEditForm.setEventListeners();
@@ -156,9 +158,11 @@ const popupPhotoEdit = new PopupWithForm({
     popupPhotoEdit.setWaitingText();
     api
       .setNewProfilePhoto(data["photo-url"])
-      .then(() => userInfo.setUserPhoto(data["photo-url"]))
-      .catch((error) => console.log(`Ошибка.....: ${error}`))
-      .finally(() => popupPhotoEdit.close());
+      .then(() => {
+        userInfo.setUserPhoto(data["photo-url"]);
+        popupPhotoEdit.close();
+      })
+      .catch((error) => console.log(`Ошибка.....: ${error}`));      
   },
 });
 popupPhotoEdit.setEventListeners();
